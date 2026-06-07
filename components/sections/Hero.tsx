@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { ArrowDown, MapPin } from "lucide-react";
 import { HERO, STORE_HOURS } from "@/lib/constants";
 
@@ -53,18 +54,16 @@ export default function Hero() {
       aria-label="Hero — Welcome to Jerry's Warehouse"
       className="relative min-h-screen flex flex-col justify-center grain-hero overflow-hidden"
     >
-      {/* Background image with fallback */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `url('/images/hero-bg.png')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center 30%",
-          backgroundRepeat: "no-repeat",
-        }}
-        role="img"
-        aria-label="Thrift store interior with vintage items"
-      />
+      {/* Background image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/hero-bg.png"
+          alt="Thrift store interior with vintage items"
+          fill
+          priority
+          className="object-cover object-[center_30%]"
+        />
+      </div>
 
       {/* Warm dark gradient overlay */}
       <div
