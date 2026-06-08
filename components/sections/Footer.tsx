@@ -5,6 +5,7 @@ import ContactForm from "./ContactForm";
 export default function Footer() {
   return (
     <footer
+      id="contact"
       role="contentinfo"
       className="bg-[#f5ede0] border-t border-[#e8d8c0]"
     >
