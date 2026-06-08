@@ -219,3 +219,25 @@ h4 {
   text-transform: uppercase;
   color: var(--amber);
 }
+
+/* ─── Contact Form Checkmark ─────────────────────────────────────────────────── */
+
+.check-circle {
+  stroke-dasharray: 151;
+  stroke-dashoffset: 151;
+  animation: check-circle-draw 0.5s ease-out forwards;
+}
+
+.check-mark {
+  stroke-dasharray: 36;
+  stroke-dashoffset: 36;
+  animation: check-mark-draw 0.35s ease-out 0.4s forwards;
+}
+
+@keyframes check-circle-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes check-mark-draw {
+  to { stroke-dashoffset: 0; }
+}

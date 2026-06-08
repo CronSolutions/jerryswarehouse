@@ -120,17 +120,17 @@ export default function Reviews() {
       id="reviews"
       ref={sectionRef}
       aria-labelledby="reviews-heading"
-      className="py-24 lg:py-32 bg-[#ffffff]"
+      className="py-24 lg:py-32 bg-[#4a2c0a]"
     >
       <div className="px-6 sm:px-8 lg:px-[150px]">
         {/* Header */}
         <div className="text-center mb-12 animate-on-scroll">
           <h2
             id="reviews-heading"
-            className="font-serif text-4xl md:text-5xl font-bold text-[#4a2c0a] mb-5 leading-tight"
+            className="font-serif text-4xl md:text-5xl font-bold text-[#faf6ed] mb-5 leading-tight"
           >
             Loved by{" "}
-            <em className="text-[#c49335] not-italic">Worcester</em>
+            <em className="text-[#d4a853] not-italic">Worcester</em>
           </h2>
           <div className="gold-divider mx-auto" aria-hidden="true" />
         </div>
@@ -193,7 +193,7 @@ export default function Reviews() {
             href="https://www.google.com/maps/place/Jerry's+Warehouse/@42.2708309,-71.8103054,17z"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-[#6e4218] hover:text-[#c49335] transition-colors duration-200"
+            className="inline-flex items-center gap-2 text-sm text-[#e8d8c0] hover:text-[#d4a853] transition-colors duration-200"
             aria-label="See all reviews on Google Maps (opens in new tab)"
           >
             <ExternalLink size={14} aria-hidden="true" />

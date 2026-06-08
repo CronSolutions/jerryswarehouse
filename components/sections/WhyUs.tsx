@@ -33,7 +33,7 @@ export default function WhyUs() {
       id="why-us"
       ref={sectionRef}
       aria-labelledby="why-us-heading"
-      className="py-24 lg:py-32 bg-[#ffffff]"
+      className="pt-10 pb-24 lg:pt-16 lg:pb-32 bg-[#ffffff]"
     >
       <div className="px-6 sm:px-8 lg:px-[150px] relative z-10">
         {/* Eyebrow — stays centered */}
@@ -42,7 +42,7 @@ export default function WhyUs() {
         {/* Two-column layout: image left, content right */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Image — left */}
-          <div className="animate-on-scroll">
+          <div className="animate-on-scroll order-2 lg:order-1">
             <div className="relative aspect-[5/4] w-full overflow-hidden">
               <Image
                 src={asset("/images/why-us.png")}
@@ -55,15 +55,15 @@ export default function WhyUs() {
           </div>
 
           {/* Content — right */}
-          <div className="animate-on-scroll stagger-1">
+          <div className="animate-on-scroll stagger-1 order-1 lg:order-2">
             {/* Heading: Jerry's | Difference */}
             <h2
               id="why-us-heading"
-              className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-[#4a2c0a] mb-24 leading-tight flex flex-wrap items-center gap-x-5 gap-y-2"
+              className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-[#4a2c0a] mb-8 lg:mb-24 leading-tight flex flex-wrap items-center gap-x-5 gap-y-2"
             >
               <span>The Jerry&apos;s</span>
               <span
-                className="hidden sm:inline-block h-12 lg:h-14 w-px bg-[#4a2c0a]/30"
+                className="inline-block h-10 sm:h-12 lg:h-14 w-px bg-[#4a2c0a]/30"
                 aria-hidden="true"
               />
               <em className="text-[#c49335] italic">Difference</em>
