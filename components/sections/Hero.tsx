@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { ArrowDown, MapPin } from "lucide-react";
 import { HERO, STORE_HOURS } from "@/lib/constants";
+import { asset } from "@/lib/asset";
 
 function getTodayStatus(): string {
   const dayIndex = new Date().getDay(); // 0 = Sunday
@@ -57,7 +58,7 @@ export default function Hero() {
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/hero-bg.png"
+          src={asset("/images/hero-bg.png")}
           alt="Thrift store interior with vintage items"
           fill
           priority

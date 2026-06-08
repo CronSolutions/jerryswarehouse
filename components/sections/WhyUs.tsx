@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { VALUE_PROPS } from "@/lib/constants";
+import { asset } from "@/lib/asset";
 
 export default function WhyUs() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -44,7 +45,7 @@ export default function WhyUs() {
           <div className="animate-on-scroll">
             <div className="relative aspect-[5/4] w-full overflow-hidden">
               <Image
-                src="/images/why-us.png"
+                src={asset("/images/why-us.png")}
                 alt="Beautifully finished interior featuring our flooring"
                 fill
                 className="object-cover"
