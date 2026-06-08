@@ -85,7 +85,6 @@ export default function HoursLocation() {
           {/* Hours — right on desktop */}
           <div className="animate-on-scroll stagger-1 lg:order-2">
             <div className="flex items-center gap-3 mb-8">
-              <Clock size={22} className="text-[#c49335]" strokeWidth={1.5} />
               <h3 className="font-serif text-3xl font-bold text-[#4a2c0a]">Store Hours</h3>
             </div>
 
