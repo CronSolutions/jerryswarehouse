@@ -120,18 +120,17 @@ export default function Reviews() {
       id="reviews"
       ref={sectionRef}
       aria-labelledby="reviews-heading"
-      className="py-24 lg:py-32 bg-[#faf6ed]"
+      className="py-24 lg:py-32 bg-[#ffffff]"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="px-6 sm:px-8 lg:px-[150px]">
         {/* Header */}
         <div className="text-center mb-12 animate-on-scroll">
-          <p className="section-eyebrow mb-4">What People Are Saying</p>
           <h2
             id="reviews-heading"
-            className="font-serif text-4xl md:text-5xl font-bold text-[#3d2c1a] mb-5 leading-tight"
+            className="font-serif text-4xl md:text-5xl font-bold text-[#4a2c0a] mb-5 leading-tight"
           >
-            Customer{" "}
-            <em className="text-[#c49335] not-italic">Reviews</em>
+            Loved by{" "}
+            <em className="text-[#c49335] not-italic">Worcester</em>
           </h2>
           <div className="gold-divider mx-auto" aria-hidden="true" />
         </div>
@@ -142,7 +141,7 @@ export default function Reviews() {
           <button
             onClick={() => scroll("left")}
             aria-label="Scroll reviews left"
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-10 w-10 h-10 rounded-full bg-[#ede6d7] border border-[#d9cdb8] items-center justify-center text-[#6b5444] hover:text-[#c49335] hover:border-[#c49335]/40 transition-all duration-200 shadow-sm"
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-10 w-10 h-10 rounded-full bg-[#f5ede0] border border-[#e8d8c0] items-center justify-center text-[#6e4218] hover:text-[#c49335] hover:border-[#c49335]/40 transition-all duration-200 shadow-sm"
           >
             <ChevronLeft size={18} />
           </button>
@@ -155,7 +154,7 @@ export default function Reviews() {
             {REVIEWS.map((review, i) => (
               <article
                 key={i}
-                className="snap-start shrink-0 w-[82vw] sm:w-72 md:w-80 bg-[#ede6d7] border border-[#d9cdb8] rounded-2xl p-6 flex flex-col gap-4"
+                className="snap-start shrink-0 w-[82vw] sm:w-80 md:w-[340px] min-h-[380px] bg-[#f5ede0] border border-[#e8d8c0] p-8 flex flex-col gap-5"
               >
                 {/* Stars */}
                 <div className="flex gap-1" aria-label={`${review.rating} out of 5 stars`}>
@@ -165,14 +164,14 @@ export default function Reviews() {
                 </div>
 
                 {/* Comment */}
-                <p className="text-[#6b5444] text-sm leading-relaxed flex-1">
+                <p className="text-[#6e4218] text-sm leading-relaxed flex-1">
                   &ldquo;{review.text}&rdquo;
                 </p>
 
                 {/* Attribution */}
-                <div>
-                  <p className="font-semibold text-[#3d2c1a] text-sm">{review.name}</p>
-                  <p className="text-[#9a7f6a] text-xs mt-0.5">Google Reviewer · {review.timeAgo}</p>
+                <div className="border-t border-[#e8d8c0] pt-4">
+                  <p className="font-semibold text-[#4a2c0a] text-sm">{review.name}</p>
+                  <p className="text-[#9a6840] text-xs mt-0.5">Google Reviewer · {review.timeAgo}</p>
                 </div>
               </article>
             ))}
@@ -182,7 +181,7 @@ export default function Reviews() {
           <button
             onClick={() => scroll("right")}
             aria-label="Scroll reviews right"
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-10 w-10 h-10 rounded-full bg-[#ede6d7] border border-[#d9cdb8] items-center justify-center text-[#6b5444] hover:text-[#c49335] hover:border-[#c49335]/40 transition-all duration-200 shadow-sm"
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-10 w-10 h-10 rounded-full bg-[#f5ede0] border border-[#e8d8c0] items-center justify-center text-[#6e4218] hover:text-[#c49335] hover:border-[#c49335]/40 transition-all duration-200 shadow-sm"
           >
             <ChevronRight size={18} />
           </button>
@@ -194,7 +193,7 @@ export default function Reviews() {
             href="https://www.google.com/maps/place/Jerry's+Warehouse/@42.2708309,-71.8103054,17z"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-[#6b5444] hover:text-[#c49335] transition-colors duration-200"
+            className="inline-flex items-center gap-2 text-sm text-[#6e4218] hover:text-[#c49335] transition-colors duration-200"
             aria-label="See all reviews on Google Maps (opens in new tab)"
           >
             <ExternalLink size={14} aria-hidden="true" />

@@ -84,12 +84,12 @@ export default function Hero() {
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-8 pt-28 pb-20 flex flex-col items-center md:items-start">
+      <div className="relative z-10 w-full px-6 sm:px-8 lg:px-[150px] pt-28 pb-20 md:py-0 flex flex-col items-center md:items-start">
 
         {/* Tagline */}
         <p
           ref={taglineRef}
-          className="font-serif italic text-base sm:text-xl md:text-2xl text-[#c9bfa0] max-w-sm md:max-w-xl leading-relaxed hero-text-shadow text-center md:text-left mb-2"
+          className="font-serif italic text-base sm:text-xl md:text-2xl text-[#c8a07a] max-w-sm md:max-w-xl leading-relaxed hero-text-shadow text-center md:text-left mb-2"
         >
           {HERO.tagline}
         </p>

@@ -7,17 +7,17 @@
 /* ─── CSS Variables ──────────────────────────────────────────────────────────── */
 
 :root {
-  --bg: #faf6ed;
-  --bg-soft: #f3ece0;
-  --bg-card: #ede6d7;
-  --bg-border: #d9cdb8;
+  --bg: #ffffff;
+  --bg-soft: #fafafa;
+  --bg-card: #f5ede0;
+  --bg-border: #e8d8c0;
   --amber: #c49335;
   --amber-light: #d4a853;
   --amber-dark: #8a6420;
-  --cream: #faf6ed;
-  --cream-muted: #6b5444;
-  --cream-dim: #9a7f6a;
-  --brown: #3d2c1a;
+  --cream: #ffffff;
+  --cream-muted: #6e4218;
+  --cream-dim: #9a6840;
+  --brown: #4a2c0a;
 }
 
 /* ─── Base ───────────────────────────────────────────────────────────────────── */

@@ -171,9 +171,10 @@ export const META: MetaInfo = {
 // ─── Nav ──────────────────────────────────────────────────────────────────────
 
 export const NAV_LINKS = [
-  { label: "Categories", href: "#categories" },
-  { label: "Why Us", href: "#why-us" },
-  { label: "Hours", href: "#location" },
+  { label: "HOME", href: "#hero" },
+  { label: "CATEGORIES", href: "#categories" },
+  { label: "WHY US", href: "#why-us" },
+  { label: "HOURS", href: "#location" },
 ];
 
 // ─── Footer ───────────────────────────────────────────────────────────────────

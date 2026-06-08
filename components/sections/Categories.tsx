@@ -11,18 +11,20 @@ export default function CategoriesBar() {
 
   return (
     <section
-      className="bg-[#faf6ed] border-y border-[#d9cdb8] py-16 overflow-hidden"
+      className="bg-[#fafafa] border-y border-[#e8d8c0] py-16 px-6 sm:px-8 lg:px-[150px]"
       aria-label="Store categories"
     >
+      <div className="overflow-hidden">
       <div className="flex w-max animate-marquee">
         {repeated.map((title, i) => (
           <span key={i} className="inline-flex items-center flex-shrink-0">
-            <span className="font-serif italic font-normal text-6xl sm:text-7xl text-[#3d2c1a] whitespace-nowrap">
+            <span className="font-serif italic font-normal text-6xl sm:text-7xl text-[#4a2c0a] whitespace-nowrap">
               {title}
             </span>
             {separator}
           </span>
         ))}
+      </div>
       </div>
     </section>
   );

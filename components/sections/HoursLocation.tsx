@@ -39,15 +39,14 @@ export default function HoursLocation() {
       id="location"
       ref={sectionRef}
       aria-labelledby="hours-heading"
-      className="py-24 lg:py-32 bg-[#f3ece0]"
+      className="py-24 lg:py-32 bg-[#ffffff]"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="px-6 sm:px-8 lg:px-[150px]">
         {/* Section header */}
         <div className="text-center mb-16 animate-on-scroll">
-          <p className="section-eyebrow mb-4">Find Us</p>
           <h2
             id="hours-heading"
-            className="font-serif text-4xl md:text-5xl font-bold text-[#3d2c1a] mb-5 leading-tight"
+            className="font-serif text-4xl md:text-5xl font-bold text-[#4a2c0a] mb-5 leading-tight"
           >
             Hours &amp;{" "}
             <em className="text-[#c49335] not-italic">Location</em>
@@ -58,15 +57,15 @@ export default function HoursLocation() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Hours card */}
           <div className="animate-on-scroll stagger-1">
-            <div className="bg-[#ede6d7] border border-[#d9cdb8] rounded-2xl p-8 h-full">
+            <div className="bg-[#f5ede0] border border-[#e8d8c0] rounded-2xl p-8 h-full">
               <div className="flex items-center gap-3 mb-8">
                 <div
-                  className="w-10 h-10 bg-[#d9cdb8] rounded-lg flex items-center justify-center"
+                  className="w-10 h-10 bg-[#e8d8c0] rounded-lg flex items-center justify-center"
                   aria-hidden="true"
                 >
                   <Clock size={18} className="text-[#c49335]" strokeWidth={1.5} />
                 </div>
-                <h3 className="font-serif text-2xl font-bold text-[#3d2c1a]">
+                <h3 className="font-serif text-2xl font-bold text-[#4a2c0a]">
                   Store Hours
                 </h3>
               </div>
@@ -95,7 +94,7 @@ export default function HoursLocation() {
                           className={`py-3 px-3 font-medium text-sm rounded-l-lg ${
                             isToday
                               ? "text-[#c49335] font-semibold"
-                              : "text-[#6b5444]"
+                              : "text-[#6e4218]"
                           }`}
                         >
                           <span className="flex items-center gap-2">
@@ -116,10 +115,10 @@ export default function HoursLocation() {
                         <td
                           className={`py-3 px-3 text-sm text-right rounded-r-lg font-mono ${
                             row.closed
-                              ? "text-[#9a7f6a] italic"
+                              ? "text-[#9a6840] italic"
                               : isToday
                               ? "text-[#c49335] font-semibold"
-                              : "text-[#6b5444]"
+                              : "text-[#6e4218]"
                           }`}
                         >
                           {row.closed
@@ -133,10 +132,10 @@ export default function HoursLocation() {
               </table>
 
               {/* Contact info */}
-              <div className="mt-8 pt-8 border-t border-[#d9cdb8] space-y-4">
+              <div className="mt-8 pt-8 border-t border-[#e8d8c0] space-y-4">
                 <a
                   href={`tel:${STORE_INFO.phone.replace(/\D/g, "")}`}
-                  className="flex items-center gap-3 text-[#6b5444] hover:text-[#c49335] transition-colors duration-200 group"
+                  className="flex items-center gap-3 text-[#6e4218] hover:text-[#c49335] transition-colors duration-200 group"
                   aria-label={`Call us at ${STORE_INFO.phone}`}
                 >
                   <Phone
@@ -150,7 +149,7 @@ export default function HoursLocation() {
                   href="https://www.ebay.com/usr/miso_242497?mkcid=16&mkevt=1&mkrid=711-127632-2357-0&ssspo=vrnrm_g4r4u&sssrc=4623447&ssuid=vrnrm_g4r4u&stype=1&widget_ver=artemis&media=COPY"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-[#6b5444] hover:text-[#c49335] transition-colors duration-200 group"
+                  className="flex items-center gap-3 text-[#6e4218] hover:text-[#c49335] transition-colors duration-200 group"
                   aria-label="Visit Jerry's Warehouse on eBay"
                 >
                   <ShoppingBag
@@ -166,7 +165,7 @@ export default function HoursLocation() {
 
           {/* Map card */}
           <div className="animate-on-scroll stagger-2">
-            <div className="bg-[#ede6d7] border border-[#d9cdb8] rounded-2xl overflow-hidden h-full flex flex-col">
+            <div className="bg-[#f5ede0] border border-[#e8d8c0] rounded-2xl overflow-hidden h-full flex flex-col">
               {/* Map embed */}
               <div className="relative flex-1 min-h-[300px]">
                 <iframe 
@@ -194,16 +193,16 @@ export default function HoursLocation() {
               <div className="p-6">
                 <div className="flex items-start gap-3 mb-5">
                   <div
-                    className="w-9 h-9 bg-[#d9cdb8] rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
+                    className="w-9 h-9 bg-[#e8d8c0] rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   >
                     <MapPin size={15} className="text-[#c49335]" strokeWidth={1.5} />
                   </div>
                   <address className="not-italic">
-                    <p className="font-semibold text-[#3d2c1a] text-sm">
+                    <p className="font-semibold text-[#4a2c0a] text-sm">
                       {STORE_INFO.address.street}
                     </p>
-                    <p className="text-[#6b5444] text-sm">
+                    <p className="text-[#6e4218] text-sm">
                       {STORE_INFO.address.city}, {STORE_INFO.address.state}{" "}
                       {STORE_INFO.address.zip}
                     </p>
@@ -214,7 +213,7 @@ export default function HoursLocation() {
                   href={STORE_INFO.directionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-3 px-5 bg-[#c49335] hover:bg-[#d4a853] text-[#faf6ed] font-semibold text-sm rounded-lg transition-colors duration-200"
+                  className="flex items-center justify-center gap-2 w-full py-3 px-5 bg-[#c49335] hover:bg-[#d4a853] text-[#ffffff] font-semibold text-sm rounded-lg transition-colors duration-200"
                   aria-label="Get directions to Jerry's Warehouse on Google Maps (opens in new tab)"
                 >
                   <Navigation size={15} aria-hidden="true" />

@@ -5,10 +5,10 @@ export default function Footer() {
   return (
     <footer
       role="contentinfo"
-      className="bg-[#ede6d7] border-t border-[#d9cdb8]"
+      className="bg-[#f5ede0] border-t border-[#e8d8c0]"
     >
       {/* Main footer content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="px-6 sm:px-8 lg:px-[150px] py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Brand column */}
           <div className="lg:col-span-2">
@@ -16,11 +16,11 @@ export default function Footer() {
               <span className="font-serif text-3xl font-bold text-[#c49335] block leading-none">
                 Jerry&apos;s
               </span>
-              <span className="font-serif text-sm tracking-[0.3em] uppercase text-[#9a7f6a]">
+              <span className="font-serif text-sm tracking-[0.3em] uppercase text-[#9a6840]">
                 Warehouse
               </span>
             </div>
-            <p className="font-serif italic text-[#9a7f6a] text-sm mb-6 max-w-xs">
+            <p className="font-serif italic text-[#9a6840] text-sm mb-6 max-w-xs">
               &ldquo;{FOOTER.tagline}&rdquo;
             </p>
 
@@ -33,7 +33,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.ariaLabel}
-                  className="flex items-center gap-2 px-3 py-2 bg-[#faf6ed] border border-[#d9cdb8] rounded-lg text-[#6b5444] hover:text-[#c49335] hover:border-[#c49335]/40 transition-all duration-200 text-xs font-medium"
+                  className="flex items-center gap-2 px-3 py-2 bg-[#ffffff] border border-[#e8d8c0] rounded-lg text-[#6e4218] hover:text-[#c49335] hover:border-[#c49335]/40 transition-all duration-200 text-xs font-medium"
                 >
                   <Instagram size={13} aria-hidden="true" />
                   {social.handle}
@@ -44,7 +44,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit Jerry's Warehouse on eBay"
-                className="flex items-center gap-2 px-3 py-2 bg-[#faf6ed] border border-[#d9cdb8] rounded-lg text-[#6b5444] hover:text-[#c49335] hover:border-[#c49335]/40 transition-all duration-200 text-xs font-medium"
+                className="flex items-center gap-2 px-3 py-2 bg-[#ffffff] border border-[#e8d8c0] rounded-lg text-[#6e4218] hover:text-[#c49335] hover:border-[#c49335]/40 transition-all duration-200 text-xs font-medium"
               >
                 <ShoppingBag size={13} aria-hidden="true" />
                 eBay Store
@@ -63,7 +63,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <a
                       href={link.href}
-                      className="text-sm text-[#6b5444] hover:text-[#3d2c1a] transition-colors duration-200"
+                      className="text-sm text-[#6e4218] hover:text-[#4a2c0a] transition-colors duration-200"
                     >
                       {link.label}
                     </a>
@@ -84,7 +84,7 @@ export default function Footer() {
                 href={STORE_INFO.directionsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-start gap-2 text-sm text-[#6b5444] hover:text-[#3d2c1a] transition-colors duration-200 group"
+                className="flex items-start gap-2 text-sm text-[#6e4218] hover:text-[#4a2c0a] transition-colors duration-200 group"
                 aria-label={`Get directions to ${STORE_INFO.address.full}`}
               >
                 <MapPin

@@ -1,14 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { RefreshCw, Tag, Sparkles, type LucideIcon } from "lucide-react";
+import Image from "next/image";
 import { VALUE_PROPS } from "@/lib/constants";
-
-const ICON_MAP: Record<string, LucideIcon> = {
-  RefreshCw,
-  Tag,
-  Sparkles,
-};
 
 export default function WhyUs() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -38,68 +32,62 @@ export default function WhyUs() {
       id="why-us"
       ref={sectionRef}
       aria-labelledby="why-us-heading"
-      className="py-24 lg:py-32 bg-[#f3ece0]"
+      className="py-24 lg:py-32 bg-[#ffffff]"
     >
+      <div className="px-6 sm:px-8 lg:px-[150px] relative z-10">
+        {/* Eyebrow — stays centered */}
+        
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-20 animate-on-scroll">
-          <p className="section-eyebrow mb-4">Why Jerry&apos;s</p>
-          <h2
-            id="why-us-heading"
-            className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-[#3d2c1a] mb-5 leading-tight"
-          >
-            The Jerry&apos;s{" "}
-            <em className="text-[#c49335] not-italic">Difference</em>
-          </h2>
-          <div className="gold-divider mx-auto" aria-hidden="true" />
+        {/* Two-column layout: image left, content right */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          {/* Image — left */}
+          <div className="animate-on-scroll">
+            <div className="relative aspect-[5/4] w-full overflow-hidden">
+              <Image
+                src="/images/why-us.png"
+                alt="Beautifully finished interior featuring our flooring"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+          </div>
+
+          {/* Content — right */}
+          <div className="animate-on-scroll stagger-1">
+            {/* Heading: Jerry's | Difference */}
+            <h2
+              id="why-us-heading"
+              className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-[#4a2c0a] mb-24 leading-tight flex flex-wrap items-center gap-x-5 gap-y-2"
+            >
+              <span>The Jerry&apos;s</span>
+              <span
+                className="hidden sm:inline-block h-12 lg:h-14 w-px bg-[#4a2c0a]/30"
+                aria-hidden="true"
+              />
+              <em className="text-[#c49335] italic">Difference</em>
+            </h2>
+
+            {/* Value props — serif italic titles, no icons */}
+            <ul role="list" className="space-y-10">
+              {VALUE_PROPS.map((prop, index) => (
+                <li
+                  key={prop.id}
+                  className={`animate-on-scroll stagger-${index + 2}`}
+                >
+                  <article>
+                    <h3 className="font-serif italic text-xl lg:text-2xl text-[#4a2c0a] mb-3">
+                      {prop.title}
+                    </h3>
+                    <p className="text-[#6e4218] leading-relaxed text-sm lg:text-base max-w-md">
+                      {prop.description}
+                    </p>
+                  </article>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-
-        {/* Value props */}
-        <ul role="list" className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-          {VALUE_PROPS.map((prop, index) => {
-            const Icon = ICON_MAP[prop.iconName];
-            return (
-              <li
-                key={prop.id}
-                className={`animate-on-scroll stagger-${index + 1}`}
-              >
-                <article className="text-center flex flex-col items-center">
-                  {/* Icon ring */}
-                  <div
-                    className="relative mb-8"
-                    aria-hidden="true"
-                  >
-                    <div className="w-20 h-20 rounded-full border border-[#c49335]/30 flex items-center justify-center bg-[#faf6ed]">
-                      <div className="w-14 h-14 rounded-full border border-[#c49335]/20 bg-[#ede6d7] flex items-center justify-center">
-                        {Icon && (
-                          <Icon
-                            size={24}
-                            className="text-[#c49335]"
-                            strokeWidth={1.5}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <h3 className="font-serif text-2xl lg:text-3xl font-bold text-[#3d2c1a] mb-4 relative z-10">
-                    {prop.title}
-                  </h3>
-
-                  <div
-                    className="w-8 h-px bg-[#c49335]/50 mb-5"
-                    aria-hidden="true"
-                  />
-
-                  <p className="text-[#6b5444] leading-relaxed text-sm max-w-sm">
-                    {prop.description}
-                  </p>
-                </article>
-              </li>
-            );
-          })}
-        </ul>
       </div>
     </section>
   );

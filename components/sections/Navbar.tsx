@@ -28,6 +28,7 @@ export default function Navbar() {
 
   const handleNav = (href: string) => {
     setIsOpen(false);
+    if (!href) { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
     const el = document.querySelector(href);
     el?.scrollIntoView({ behavior: "smooth" });
   };
@@ -39,11 +40,11 @@ export default function Navbar() {
         hidden ? "-translate-y-full" : "translate-y-0"
       } ${
         scrolled || isOpen
-          ? "bg-[#faf6ed] backdrop-blur-md border-b border-[#d9cdb8] py-3"
+          ? "bg-[#f5ede0] backdrop-blur-md border-b border-[#e8d8c0] py-3"
           : "bg-transparent py-3"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="px-6 sm:px-8 lg:px-[150px]">
         <nav
           aria-label="Main navigation"
           className="flex items-center justify-between"
@@ -57,33 +58,34 @@ export default function Navbar() {
             <span className="font-serif text-3xl font-bold text-[#d4a853] group-hover:text-[#e8c278] transition-colors duration-300">
               Jerry&apos;s
             </span>
-            <span className={`font-serif text-sm tracking-[0.25em] uppercase transition-colors duration-300 ${scrolled || isOpen ? "text-[#9a7f6a] group-hover:text-[#6b5444]" : "text-[#c9bfa0] group-hover:text-[#f5eed8]"}`}>
+            <span className={`font-serif text-sm tracking-[0.25em] uppercase transition-colors duration-300 ${scrolled || isOpen ? "text-[#6e4218] group-hover:text-[#4a2c0a]" : "text-[#c8a07a] group-hover:text-[#f5eed8]"}`}>
               Warehouse
             </span>
           </a>
 
-          {/* Desktop nav */}
-          <ul className="hidden md:flex items-center gap-8" role="list">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <button
-                  onClick={() => handleNav(link.href)}
-                  className="text-xl font-medium transition-colors duration-200 tracking-wide text-[#c9bfa0] hover:text-[#d4a853]"
-                >
-                  {link.label}
-                </button>
-              </li>
-            ))}
-          </ul>
+          {/* Desktop nav + CTA grouped on the right */}
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
+            <ul className="flex items-center gap-6 lg:gap-8" role="list">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <button
+                    onClick={() => handleNav(link.href)}
+                    className={`text-base lg:text-xl font-semibold transition-colors duration-200 tracking-wide hover:text-[#d4a853] ${scrolled || isOpen ? "text-[#4a2c0a]" : "text-[#ffffff]"}`}
+                  >
+                    {link.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
 
-          {/* Desktop CTA */}
-          <a
-            href="tel:+15085550192"
-            className="hidden md:flex items-center gap-2 text-md font-semibold text-[#faf6ed] bg-[#c49335] hover:bg-[#d4a853] px-4 py-2 rounded transition-colors duration-200"
-            aria-label={`Call us at ${STORE_INFO.phone}`}
-          >
-            {STORE_INFO.phone}
-          </a>
+            <a
+              href="tel:+15085550192"
+              className="hidden lg:flex items-center gap-2 text-xl font-semibold text-[#ffffff] bg-[#c49335] hover:bg-[#d4a853] px-4 py-2 rounded transition-colors duration-200"
+              aria-label={`Call us at ${STORE_INFO.phone}`}
+            >
+              {STORE_INFO.phone}
+            </a>
+          </div>
 
           {/* Mobile toggle */}
           <button
@@ -91,7 +93,7 @@ export default function Navbar() {
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
             onClick={() => setIsOpen(!isOpen)}
-            className={`md:hidden p-2 transition-colors ${scrolled || isOpen ? "text-[#6b5444] hover:text-[#c49335]" : "text-[#c9bfa0] hover:text-[#d4a853]"}`}
+            className={`md:hidden p-2 transition-colors ${scrolled || isOpen ? "text-[#4a2c0a] hover:text-[#c49335]" : "text-[#c8a07a] hover:text-[#d4a853]"}`}
           >
             {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -113,17 +115,17 @@ export default function Navbar() {
               <li key={link.href}>
                 <button
                   onClick={() => handleNav(link.href)}
-                  className="w-full text-left px-4 py-3.5 text-[#3d2c1a] hover:text-[#c49335] hover:bg-[#ede6d7] rounded-lg transition-colors duration-200 text-base font-medium"
+                  className="w-full text-left px-4 py-3.5 text-[#4a2c0a] hover:text-[#c49335] hover:bg-[#f5ede0] rounded-lg transition-colors duration-200 text-base font-medium"
                 >
                   {link.label}
                 </button>
               </li>
             ))}
           </ul>
-          <div className="mt-3 pt-4 border-t border-[#d9cdb8]">
+          <div className="mt-3 pt-4 border-t border-[#e8d8c0]">
             <a
               href="tel:+15085550192"
-              className="block text-center text-sm font-semibold text-[#faf6ed] bg-[#c49335] hover:bg-[#d4a853] px-4 py-3.5 rounded-lg transition-colors duration-200"
+              className="block text-center text-sm font-semibold text-[#ffffff] bg-[#c49335] hover:bg-[#d4a853] px-4 py-3.5 rounded-lg transition-colors duration-200"
             >
               {STORE_INFO.phone}
             </a>
