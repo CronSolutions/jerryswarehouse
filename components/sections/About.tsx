@@ -75,7 +75,7 @@ export default function About() {
           <div className="animate-on-scroll stagger-1 lg:order-2">
             <div className="relative aspect-[5/4] w-full overflow-hidden">
               <Image
-                src={asset("/images/about.png")}
+                src={asset("/images/about.webp")}
                 alt="Inside Jerry's Warehouse — racks of curated vintage finds"
                 fill
                 className="object-cover"

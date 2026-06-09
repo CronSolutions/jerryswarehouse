@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { ArrowDown, MapPin } from "lucide-react";
 import { HERO, STORE_HOURS } from "@/lib/constants";
 import { asset } from "@/lib/asset";
 
@@ -58,7 +57,7 @@ export default function Hero() {
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src={asset("/images/hero-bg.png")}
+          src={asset("/images/hero-bg.webp")}
           alt="Thrift store interior with vintage items"
           fill
           priority

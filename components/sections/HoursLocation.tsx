@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Clock, MapPin, Phone, Navigation, ShoppingBag } from "lucide-react";
 import { STORE_HOURS, STORE_INFO } from "@/lib/constants";
 
@@ -9,8 +9,13 @@ function getTodayIndex(): number {
   return d === 0 ? 6 : d - 1;
 }
 
+const MAP_SRC =
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2952.360337545654!2d-71.81030538793966!3d42.27083087108138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e38d405c98edaf%3A0x532fad0eab9785f1!2sJerry's%20Warehouse!5e0!3m2!1sen!2sus!4v1780863371163!5m2!1sen!2sus";
+
 export default function HoursLocation() {
   const sectionRef = useRef<HTMLElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [showMap, setShowMap] = useState(false);
   const todayIndex = getTodayIndex();
 
   useEffect(() => {
@@ -30,6 +35,23 @@ export default function HoursLocation() {
     return () => observer.disconnect();
   }, []);
 
+  // Start loading the map ~600px before it scrolls into view so it's ready in time.
+  useEffect(() => {
+    const el = mapRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShowMap(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "600px 0px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
       id="location"
@@ -44,18 +66,23 @@ export default function HoursLocation() {
 
           {/* Map — left on desktop */}
           <div className="animate-on-scroll stagger-2 lg:order-1 flex flex-col gap-6">
-            {/* Map embed */}
-            <div className="w-full min-h-[420px] lg:min-h-[500px] overflow-hidden">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2952.360337545654!2d-71.81030538793966!3d42.27083087108138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e38d405c98edaf%3A0x532fad0eab9785f1!2sJerry&#39;s%20Warehouse!5e0!3m2!1sen!2sus!4v1780863371163!5m2!1sen!2sus"
-                width="100%"
-                height="100%"
-                style={{ minHeight: "420px", border: 0, display: "block" }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Jerry's Warehouse on Google Maps"
-              />
+            {/* Map embed — mounts early (via observer) so it's ready on scroll */}
+            <div
+              ref={mapRef}
+              className="w-full min-h-[420px] lg:min-h-[500px] overflow-hidden bg-[#f5ede0]"
+            >
+              {showMap && (
+                <iframe
+                  src={MAP_SRC}
+                  width="100%"
+                  height="100%"
+                  style={{ minHeight: "420px", border: 0, display: "block" }}
+                  allowFullScreen
+                  loading="eager"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Jerry's Warehouse on Google Maps"
+                />
+              )}
             </div>
 
             {/* Address + directions */}

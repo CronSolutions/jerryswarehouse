@@ -5,7 +5,6 @@ import About from "@/components/sections/About";
 import WhyUs from "@/components/sections/WhyUs";
 import Reviews from "@/components/sections/Reviews";
 import HoursLocation from "@/components/sections/HoursLocation";
-import DonationsCTA from "@/components/sections/DonationsCTA";
 import Footer from "@/components/sections/Footer";
 
 export default function HomePage() {

@@ -107,14 +107,14 @@ export const VALUE_PROPS: ValueProp[] = [
     id: "rotating",
     title: "Constantly Rotating Stock",
     description:
-      "New donations arrive every single day. No two visits are alike — the thrill of the hunt is always real at Jerry's.",
+      "New donations arrive every single week. No two visits are alike — the thrill of the hunt is always real at Jerry's.",
     iconName: "RefreshCw",
   },
   {
     id: "prices",
     title: "Unbeatable Prices",
     description:
-      "Save up to 90% off retail on clothing, furniture, and more. Your dollar goes further here than anywhere else in Worcester.",
+      "Save up to 90% off retail on clothing, antiques, and more. Your dollar goes further here than anywhere else in Worcester.",
     iconName: "Tag",
   },
   {

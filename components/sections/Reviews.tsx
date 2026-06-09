@@ -190,7 +190,7 @@ export default function Reviews() {
         {/* Google link */}
         <div className="mt-10 text-center animate-on-scroll">
           <a
-            href="https://www.google.com/maps/place/Jerry's+Warehouse/@42.2708309,-71.8103054,17z"
+            href="https://www.google.com/maps/place/Jerry's+Warehouse/@42.2708309,-71.8103054,17z/data=!4m18!1m9!3m8!1s0x89e38d405c98edaf:0x532fad0eab9785f1!2sJerry's+Warehouse!8m2!3d42.2708309!4d-71.8077251!9m1!1b1!16s%2Fg%2F11vj_1db0_!3m7!1s0x89e38d405c98edaf:0x532fad0eab9785f1!8m2!3d42.2708309!4d-71.8077251!9m1!1b1!16s%2Fg%2F11vj_1db0_?entry=ttu&g_ep=EgoyMDI2MDYwNy4wIKXMDSoASAFQAw%3D%3D"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-[#e8d8c0] hover:text-[#d4a853] transition-colors duration-200"

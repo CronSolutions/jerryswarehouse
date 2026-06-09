@@ -45,7 +45,7 @@ export default function WhyUs() {
           <div className="animate-on-scroll order-2 lg:order-1">
             <div className="relative aspect-[5/4] w-full overflow-hidden">
               <Image
-                src={asset("/images/why-us.png")}
+                src={asset("/images/why-us.webp")}
                 alt="Beautifully finished interior featuring our flooring"
                 fill
                 className="object-cover"
