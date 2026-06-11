@@ -117,7 +117,7 @@ export default function Footer({
 
                 <a
                   href="/admin"
-                  className="hidden md:inline-block mt-5 text-sm text-[#9a6840] hover:text-[#c49335] transition-colors duration-200"
+                  className="inline-block mt-5 text-sm text-[#9a6840] hover:text-[#c49335] transition-colors duration-200"
                 >
                   Admin
                 </a>
