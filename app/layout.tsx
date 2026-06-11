@@ -4,6 +4,7 @@ import "./globals.css";
 import { META, STORE_INFO } from "@/lib/constants";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { CartProvider } from "@/lib/cart";
 
 // Self-hosted, weight-trimmed fonts (no third-party Google Fonts request)
 const playfair = Playfair_Display({
@@ -113,7 +114,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://maps.gstatic.com" />
       </head>
       <body className="bg-[#ffffff] text-[#4a2c0a] antialiased overflow-x-hidden">
-        {children}
+        <CartProvider>{children}</CartProvider>
         <Analytics />
         <SpeedInsights />
       </body>

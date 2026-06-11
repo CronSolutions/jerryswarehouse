@@ -5,6 +5,7 @@ import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { getStoreInfo, getFooter } from "@/lib/content";
 import { getProduct, productImageUrl, formatPrice } from "@/lib/shop";
+import AddToCartButton from "@/components/shop/AddToCartButton";
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const product = await getProduct(params.id);
@@ -104,17 +105,15 @@ export default async function ProductPage({ params }: { params: { id: string } }
                   Sold
                 </span>
               ) : (
-                <div>
-                  <button
-                    disabled
-                    className="bg-[#c49335] text-white font-semibold text-sm px-8 py-4 rounded opacity-60 cursor-not-allowed"
-                  >
-                    Add to Cart
-                  </button>
-                  <p className="text-xs text-[#9a6840] mt-2">
-                    Online checkout is being set up — coming soon.
-                  </p>
-                </div>
+                <AddToCartButton
+                  item={{
+                    id: product.id,
+                    name: product.name,
+                    price_cents: product.price_cents,
+                    image: product.images[0] ?? "",
+                    size: product.size,
+                  }}
+                />
               )}
             </div>
           </div>

@@ -2,9 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import { Menu, X, ShoppingBag } from "lucide-react";
 import { STORE_INFO, NAV_LINKS } from "@/lib/constants";
 import { CONTENT_DEFAULTS, type StoreInfoContent } from "@/lib/content";
+import { useCart } from "@/lib/cart";
 
 export default function Navbar({
   storeInfo,
@@ -14,6 +16,7 @@ export default function Navbar({
   solid?: boolean;
 }) {
   const router = useRouter();
+  const { count } = useCart();
   const phone = (storeInfo ?? CONTENT_DEFAULTS.store_info).phone;
   const telHref = `tel:${phone.replace(/\D/g, "")}`;
   const [isOpen, setIsOpen] = useState(false);
@@ -102,6 +105,19 @@ export default function Navbar({
               ))}
             </ul>
 
+            <Link
+              href="/shop/cart"
+              aria-label={`Cart${count ? ` (${count})` : ""}`}
+              className={`relative transition-colors ${solidBar ? "text-[#4a2c0a] hover:text-[#c49335]" : "text-white hover:text-[#d4a853]"}`}
+            >
+              <ShoppingBag size={22} strokeWidth={1.75} />
+              {count > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-[#c49335] text-white text-[11px] font-semibold flex items-center justify-center">
+                  {count}
+                </span>
+              )}
+            </Link>
+
             <a
               href={telHref}
               className="hidden lg:flex items-center gap-2 text-xl font-semibold text-[#ffffff] bg-[#c49335] hover:bg-[#d4a853] px-4 py-2 rounded transition-colors duration-200"
@@ -111,16 +127,30 @@ export default function Navbar({
             </a>
           </div>
 
-          {/* Mobile toggle */}
-          <button
-            aria-label={isOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isOpen}
-            aria-controls="mobile-menu"
-            onClick={() => setIsOpen(!isOpen)}
-            className={`md:hidden p-2 transition-colors ${solidBar ? "text-[#4a2c0a] hover:text-[#c49335]" : "text-[#c8a07a] hover:text-[#d4a853]"}`}
-          >
-            {isOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+          {/* Mobile: cart + toggle */}
+          <div className="md:hidden flex items-center gap-3">
+            <Link
+              href="/shop/cart"
+              aria-label={`Cart${count ? ` (${count})` : ""}`}
+              className={`relative transition-colors ${solidBar ? "text-[#4a2c0a] hover:text-[#c49335]" : "text-[#c8a07a] hover:text-[#d4a853]"}`}
+            >
+              <ShoppingBag size={22} strokeWidth={1.75} />
+              {count > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-[#c49335] text-white text-[11px] font-semibold flex items-center justify-center">
+                  {count}
+                </span>
+              )}
+            </Link>
+            <button
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+              onClick={() => setIsOpen(!isOpen)}
+              className={`p-2 transition-colors ${solidBar ? "text-[#4a2c0a] hover:text-[#c49335]" : "text-[#c8a07a] hover:text-[#d4a853]"}`}
+            >
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </nav>
       </div>
 

@@ -3,6 +3,9 @@ import { supabasePublic } from "@/lib/supabase/public";
 
 export const PRODUCTS_TAG = "products";
 
+/** Flat shipping fee in cents, applied when the buyer chooses shipping. */
+export const SHIPPING_CENTS = 800;
+
 export type ProductStatus = "available" | "sold" | "hidden";
 
 export type Product = {
