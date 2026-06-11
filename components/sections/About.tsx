@@ -3,8 +3,10 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { asset } from "@/lib/asset";
+import { CONTENT_DEFAULTS, type AboutContent } from "@/lib/content";
 
-export default function About() {
+export default function About({ content }: { content?: AboutContent }) {
+  const about = content ?? CONTENT_DEFAULTS.about;
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -53,20 +55,13 @@ export default function About() {
 
             <div className="space-y-6 max-w-md">
               <p className="text-[#6e4218] leading-relaxed text-base lg:text-lg animate-on-scroll stagger-1">
-                What started as a small vintage spot has grown into one of
-                Worcester&apos;s most-loved hidden gems. Jerry&apos;s Warehouse
-                is built on a simple idea — that great things deserve a second
-                life, and everyone deserves the thrill of the find.
+                {about.paragraph1}
               </p>
               <p className="text-[#6e4218] leading-relaxed text-base lg:text-lg animate-on-scroll stagger-2">
-                Every rack and shelf is hand-curated, from 90s denim and band
-                tees to one-of-a-kind furniture and collectibles. New treasures
-                arrive constantly, so no two visits are ever the same.
+                {about.paragraph2}
               </p>
               <p className="text-[#6e4218] leading-relaxed text-base lg:text-lg animate-on-scroll stagger-3">
-                More than a store, it&apos;s a community — a place to dig, to
-                discover, and to leave with something that feels like it was
-                waiting just for you.
+                {about.paragraph3}
               </p>
             </div>
           </div>

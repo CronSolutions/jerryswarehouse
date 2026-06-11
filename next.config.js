@@ -1,15 +1,8 @@
-const repo = process.env.GITHUB_REPOSITORY?.split("/")[1];
-const basePath = repo ? `/${repo}` : "";
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
-  basePath,
-  env: {
-    NEXT_PUBLIC_BASE_PATH: basePath,
-  },
+  // Dynamic app on Vercel — image optimization enabled, no static export/basePath.
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
   },
 };
 

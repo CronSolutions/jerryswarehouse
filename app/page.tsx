@@ -6,15 +6,18 @@ import WhyUs from "@/components/sections/WhyUs";
 import Reviews from "@/components/sections/Reviews";
 import HoursLocation from "@/components/sections/HoursLocation";
 import Footer from "@/components/sections/Footer";
+import { getHero, getAbout } from "@/lib/content";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [hero, about] = await Promise.all([getHero(), getAbout()]);
+
   return (
     <>
       <Navbar />
       <main id="main-content">
-        <Hero />
+        <Hero content={hero} />
         <Categories />
-        <About />
+        <About content={about} />
         <WhyUs />
         <Reviews />
         <HoursLocation />

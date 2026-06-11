@@ -2,8 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { HERO, STORE_HOURS } from "@/lib/constants";
+import { HERO as HERO_DEFAULTS, STORE_HOURS } from "@/lib/constants";
 import { asset } from "@/lib/asset";
+import type { HeroContent } from "@/lib/content";
 
 function getTodayStatus(): string {
   const dayIndex = new Date().getDay(); // 0 = Sunday
@@ -12,7 +13,9 @@ function getTodayStatus(): string {
   return `Open today · ${hours.open} – ${hours.close}`;
 }
 
-export default function Hero() {
+export default function Hero({ content }: { content?: HeroContent }) {
+  // Editable text comes from Supabase via props; CTA buttons stay in constants.
+  const HERO = { ...HERO_DEFAULTS, ...content };
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const taglineRef = useRef<HTMLParagraphElement>(null);
   const ctasRef = useRef<HTMLDivElement>(null);
