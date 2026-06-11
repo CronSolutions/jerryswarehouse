@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { saveSection, signOut } from "./actions";
 import type {
   HeroContent,
@@ -230,26 +230,22 @@ export default function AdminDashboard({
                     </label>
                     {!day.closed && (
                       <>
-                        <input
+                        <TimeStepper
                           value={day.open}
-                          placeholder="12:00 PM"
-                          onChange={(e) => {
+                          onChange={(v) => {
                             const days = [...forms.hours.days];
-                            days[i] = { ...day, open: e.target.value };
+                            days[i] = { ...day, open: v };
                             update("hours", { days });
                           }}
-                          className={`${inputCls} max-w-[120px]`}
                         />
                         <span className="text-[#9a6840]">–</span>
-                        <input
+                        <TimeStepper
                           value={day.close}
-                          placeholder="7:00 PM"
-                          onChange={(e) => {
+                          onChange={(v) => {
                             const days = [...forms.hours.days];
-                            days[i] = { ...day, close: e.target.value };
+                            days[i] = { ...day, close: v };
                             update("hours", { days });
                           }}
-                          className={`${inputCls} max-w-[120px]`}
                         />
                       </>
                     )}
@@ -327,19 +323,21 @@ export default function AdminDashboard({
                 addLabel="Add review"
                 render={(item, set) => (
                   <>
-                    <div className="grid grid-cols-[1fr_90px_1fr] gap-3">
+                    <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-end">
                       <Field
                         label="Name"
                         value={item.name}
                         onChange={(v) => set({ ...item, name: v })}
                       />
-                      <Field
-                        label="Stars"
-                        value={String(item.rating)}
-                        onChange={(v) =>
-                          set({ ...item, rating: Math.max(1, Math.min(5, Number(v) || 5)) })
-                        }
-                      />
+                      <div>
+                        <label className={labelCls}>Stars</label>
+                        <NumberStepper
+                          value={item.rating}
+                          min={1}
+                          max={5}
+                          onChange={(n) => set({ ...item, rating: n })}
+                        />
+                      </div>
                       <Field
                         label="Time ago"
                         value={item.timeAgo}
@@ -476,6 +474,125 @@ function Field({
           className={inputCls}
         />
       )}
+    </div>
+  );
+}
+
+function NumberStepper({
+  value,
+  onChange,
+  min = 1,
+  max = 5,
+}: {
+  value: number;
+  onChange: (n: number) => void;
+  min?: number;
+  max?: number;
+}) {
+  const set = (n: number) => onChange(Math.max(min, Math.min(max, n)));
+  const btn =
+    "px-3 py-2 text-[#4a2c0a] hover:bg-[#f5ede0] disabled:opacity-30 disabled:cursor-not-allowed transition-colors select-none";
+  return (
+    <div className="flex items-center border border-[#e8d8c0] rounded-lg overflow-hidden w-fit">
+      <button type="button" onClick={() => set(value - 1)} disabled={value <= min} className={btn} aria-label="Decrease">
+        −
+      </button>
+      <span className="px-4 py-2 text-sm tabular-nums select-none min-w-[2.5rem] text-center border-x border-[#e8d8c0]">
+        {value}
+      </span>
+      <button type="button" onClick={() => set(value + 1)} disabled={value >= max} className={btn} aria-label="Increase">
+        +
+      </button>
+    </div>
+  );
+}
+
+// "4:00 PM" → minutes since midnight; tolerant of loose input.
+function timeToMinutes(t: string): number {
+  const m = t.trim().match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if (!m) return 12 * 60; // default noon
+  let h = parseInt(m[1], 10) % 12;
+  if (m[3].toUpperCase() === "PM") h += 12;
+  return h * 60 + parseInt(m[2], 10);
+}
+
+function minutesToTime(mins: number): string {
+  mins = ((mins % 1440) + 1440) % 1440;
+  const h = Math.floor(mins / 60);
+  const min = mins % 60;
+  const mer = h >= 12 ? "PM" : "AM";
+  const h12 = h % 12 === 0 ? 12 : h % 12;
+  return `${h12}:${String(min).padStart(2, "0")} ${mer}`;
+}
+
+// Normalize loose typing like "4" → "4:00 PM", "9 a" → "9:00 AM".
+function normalizeTime(input: string, fallback: string): string {
+  const s = input.trim().toLowerCase();
+  const m = s.match(/^(\d{1,2})(?::(\d{1,2}))?\s*(a|p)?/);
+  if (!m || !m[1]) return fallback;
+  let hour = parseInt(m[1], 10);
+  let minute = m[2] ? parseInt(m[2], 10) : 0;
+  if (isNaN(hour)) return fallback;
+  let meridiem: "AM" | "PM" | null = m[3] === "a" ? "AM" : m[3] === "p" ? "PM" : null;
+  if (hour === 0) {
+    hour = 12;
+    if (!meridiem) meridiem = "AM";
+  } else if (hour > 12) {
+    hour = ((hour - 1) % 12) + 1;
+    if (!meridiem) meridiem = "PM";
+  }
+  if (!meridiem) meridiem = "PM"; // default unspecified to PM
+  minute = isNaN(minute) ? 0 : Math.max(0, Math.min(59, minute));
+  return `${hour}:${String(minute).padStart(2, "0")} ${meridiem}`;
+}
+
+function TimeStepper({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const [draft, setDraft] = useState(value);
+  useEffect(() => setDraft(value), [value]);
+
+  const step = (delta: number) => onChange(minutesToTime(timeToMinutes(value) + delta));
+  const commit = () => {
+    const n = normalizeTime(draft, value);
+    setDraft(n);
+    if (n !== value) onChange(n);
+  };
+
+  return (
+    <div className="flex items-center gap-1">
+      <input
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+        }}
+        placeholder="4:00 PM"
+        className={`${inputCls} max-w-[110px]`}
+      />
+      <div className="flex flex-col border border-[#e8d8c0] rounded-md overflow-hidden">
+        <button
+          type="button"
+          onClick={() => step(30)}
+          aria-label="Later"
+          className="px-2 leading-none text-[#4a2c0a] hover:bg-[#f5ede0] text-xs py-1 transition-colors"
+        >
+          ▲
+        </button>
+        <button
+          type="button"
+          onClick={() => step(-30)}
+          aria-label="Earlier"
+          className="px-2 leading-none text-[#4a2c0a] hover:bg-[#f5ede0] text-xs py-1 border-t border-[#e8d8c0] transition-colors"
+        >
+          ▼
+        </button>
+      </div>
     </div>
   );
 }

@@ -85,14 +85,6 @@ export default function Footer({
                         </a>
                       </li>
                     ))}
-                    <li>
-                      <a
-                        href="/admin"
-                        className="text-sm text-[#9a6840] hover:text-[#c49335] transition-colors duration-200"
-                      >
-                        Admin
-                      </a>
-                    </li>
                   </ul>
                 </nav>
               </div>
@@ -122,6 +114,13 @@ export default function Footer({
                     </span>
                   </a>
                 </address>
+
+                <a
+                  href="/admin"
+                  className="hidden md:inline-block mt-5 text-sm text-[#9a6840] hover:text-[#c49335] transition-colors duration-200"
+                >
+                  Admin
+                </a>
               </div>
             </div>
           </div>
