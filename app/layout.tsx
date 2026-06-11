@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { META, STORE_INFO } from "@/lib/constants";
-import { asset } from "@/lib/asset";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -106,13 +105,6 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        {/* Preload the LCP hero image (basePath-aware) */}
-        <link
-          rel="preload"
-          as="image"
-          href={asset("/images/hero-bg.webp")}
-          type="image/webp"
         />
         {/* Warm up Google Maps connections so the embed loads fast on scroll */}
         <link rel="preconnect" href="https://www.google.com" />
