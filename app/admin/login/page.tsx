@@ -18,6 +18,8 @@ export default function LoginPage() {
       email: email.trim(),
       options: {
         emailRedirectTo: `${window.location.origin}/admin/auth/callback`,
+        // Don't auto-create accounts for arbitrary emails.
+        shouldCreateUser: false,
       },
     });
     setLoading(false);
@@ -36,6 +38,13 @@ export default function LoginPage() {
             Admin
           </span>
         </div>
+
+        <a
+          href="/"
+          className="block mb-6 text-center text-sm text-[#6e4218] hover:text-[#c49335] transition-colors"
+        >
+          ← Back to home
+        </a>
 
         {sent ? (
           <div className="text-center bg-white border border-[#e8d8c0] rounded-xl p-8">

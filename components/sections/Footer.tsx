@@ -1,8 +1,24 @@
 import { Instagram, MapPin, ShoppingBag } from "lucide-react";
-import { STORE_INFO, SOCIAL_LINKS, FOOTER, NAV_LINKS } from "@/lib/constants";
+import { NAV_LINKS } from "@/lib/constants";
+import {
+  CONTENT_DEFAULTS,
+  type FooterContent,
+  type StoreInfoContent,
+} from "@/lib/content";
 import ContactForm from "./ContactForm";
 
-export default function Footer() {
+export default function Footer({
+  footer,
+  storeInfo,
+}: {
+  footer?: FooterContent;
+  storeInfo?: StoreInfoContent;
+}) {
+  const data = footer ?? CONTENT_DEFAULTS.footer;
+  const info = storeInfo ?? CONTENT_DEFAULTS.store_info;
+  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+    `${info.street}, ${info.city}, ${info.state} ${info.zip}`
+  )}`;
   return (
     <footer
       id="contact"
@@ -24,26 +40,23 @@ export default function Footer() {
               </span>
             </div>
             <p className="font-serif italic text-[#9a6840] text-sm mb-8 max-w-xs">
-              &ldquo;{FOOTER.tagline}&rdquo;
+              &ldquo;{data.tagline}&rdquo;
             </p>
 
             {/* Social */}
             <div className="flex flex-wrap items-center gap-3 mb-12">
-              {SOCIAL_LINKS.map((social) => (
-                <a
-                  key={social.platform}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.ariaLabel}
-                  className="flex items-center gap-2 px-3 py-2 bg-[#ffffff] border border-[#e8d8c0] rounded-lg text-[#6e4218] hover:text-[#c49335] hover:border-[#c49335]/40 transition-all duration-200 text-xs font-medium"
-                >
-                  <Instagram size={13} aria-hidden="true" />
-                  {social.handle}
-                </a>
-              ))}
               <a
-                href="https://www.ebay.com/usr/miso_242497?mkcid=16&mkevt=1&mkrid=711-127632-2357-0&ssspo=vrnrm_g4r4u&sssrc=4623447&ssuid=vrnrm_g4r4u&stype=1&widget_ver=artemis&media=COPY"
+                href={data.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Follow Jerry's Warehouse on Instagram"
+                className="flex items-center gap-2 px-3 py-2 bg-[#ffffff] border border-[#e8d8c0] rounded-lg text-[#6e4218] hover:text-[#c49335] hover:border-[#c49335]/40 transition-all duration-200 text-xs font-medium"
+              >
+                <Instagram size={13} aria-hidden="true" />
+                {data.instagramHandle}
+              </a>
+              <a
+                href={data.ebayUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit Jerry's Warehouse on eBay"
@@ -72,6 +85,14 @@ export default function Footer() {
                         </a>
                       </li>
                     ))}
+                    <li>
+                      <a
+                        href="/admin"
+                        className="text-sm text-[#9a6840] hover:text-[#c49335] transition-colors duration-200"
+                      >
+                        Admin
+                      </a>
+                    </li>
                   </ul>
                 </nav>
               </div>
@@ -83,11 +104,11 @@ export default function Footer() {
                 </h3>
                 <address className="not-italic">
                   <a
-                    href={STORE_INFO.directionsUrl}
+                    href={directionsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-start gap-2 text-sm text-[#6e4218] hover:text-[#4a2c0a] transition-colors duration-200 group"
-                    aria-label={`Get directions to ${STORE_INFO.address.full}`}
+                    aria-label={`Get directions to ${info.street}, ${info.city}, ${info.state} ${info.zip}`}
                   >
                     <MapPin
                       size={13}
@@ -95,10 +116,9 @@ export default function Footer() {
                       aria-hidden="true"
                     />
                     <span>
-                      {STORE_INFO.address.street}
+                      {info.street}
                       <br />
-                      {STORE_INFO.address.city}, {STORE_INFO.address.state}{" "}
-                      {STORE_INFO.address.zip}
+                      {info.city}, {info.state} {info.zip}
                     </span>
                   </a>
                 </address>

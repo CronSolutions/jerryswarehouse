@@ -1,4 +1,5 @@
-const items = ["Clothes & Apparel", "Collectibles & Vintage", "Shoes & Accessories"];
+import { MARQUEE_ITEMS } from "@/lib/constants";
+import type { CategoriesContent } from "@/lib/content";
 
 const separator = (
   <span className="text-[#c49335] font-normal mx-10 select-none" aria-hidden="true">
@@ -6,7 +7,8 @@ const separator = (
   </span>
 );
 
-export default function CategoriesBar() {
+export default function CategoriesBar({ content }: { content?: CategoriesContent }) {
+  const items = content?.items?.length ? content.items : MARQUEE_ITEMS;
   const repeated = [...items, ...items, ...items, ...items];
 
   return (

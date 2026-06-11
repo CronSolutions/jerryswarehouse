@@ -3,8 +3,11 @@
 import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { STORE_INFO, NAV_LINKS } from "@/lib/constants";
+import { CONTENT_DEFAULTS, type StoreInfoContent } from "@/lib/content";
 
-export default function Navbar() {
+export default function Navbar({ storeInfo }: { storeInfo?: StoreInfoContent }) {
+  const phone = (storeInfo ?? CONTENT_DEFAULTS.store_info).phone;
+  const telHref = `tel:${phone.replace(/\D/g, "")}`;
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -79,11 +82,11 @@ export default function Navbar() {
             </ul>
 
             <a
-              href="tel:+15085550192"
+              href={telHref}
               className="hidden lg:flex items-center gap-2 text-xl font-semibold text-[#ffffff] bg-[#c49335] hover:bg-[#d4a853] px-4 py-2 rounded transition-colors duration-200"
-              aria-label={`Call us at ${STORE_INFO.phone}`}
+              aria-label={`Call us at ${phone}`}
             >
-              {STORE_INFO.phone}
+              {phone}
             </a>
           </div>
 
@@ -124,10 +127,10 @@ export default function Navbar() {
           </ul>
           <div className="mt-3 pt-4 border-t border-[#e8d8c0]">
             <a
-              href="tel:+15085550192"
+              href={telHref}
               className="block text-center text-sm font-semibold text-[#ffffff] bg-[#c49335] hover:bg-[#d4a853] px-4 py-3.5 rounded-lg transition-colors duration-200"
             >
-              {STORE_INFO.phone}
+              {phone}
             </a>
           </div>
         </div>

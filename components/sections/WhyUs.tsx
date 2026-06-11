@@ -2,10 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { VALUE_PROPS } from "@/lib/constants";
 import { asset } from "@/lib/asset";
+import { CONTENT_DEFAULTS, type ValuePropsContent } from "@/lib/content";
 
-export default function WhyUs() {
+export default function WhyUs({ content }: { content?: ValuePropsContent }) {
+  const data = content ?? CONTENT_DEFAULTS.value_props;
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -61,19 +62,19 @@ export default function WhyUs() {
               id="why-us-heading"
               className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-[#4a2c0a] mb-8 lg:mb-24 leading-tight flex flex-wrap items-center gap-x-5 gap-y-2"
             >
-              <span>The Jerry&apos;s</span>
+              <span>{data.headingLead}</span>
               <span
                 className="inline-block h-10 sm:h-12 lg:h-14 w-px bg-[#4a2c0a]/30"
                 aria-hidden="true"
               />
-              <em className="text-[#c49335] italic">Difference</em>
+              <em className="text-[#c49335] italic">{data.headingAccent}</em>
             </h2>
 
             {/* Value props — serif italic titles, no icons */}
             <ul role="list" className="space-y-10">
-              {VALUE_PROPS.map((prop, index) => (
+              {data.items.map((prop, index) => (
                 <li
-                  key={prop.id}
+                  key={index}
                   className={`animate-on-scroll stagger-${index + 2}`}
                 >
                   <article>

@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Clock, MapPin, Phone, Navigation, ShoppingBag } from "lucide-react";
-import { STORE_HOURS, STORE_INFO } from "@/lib/constants";
+import { MapPin, Phone, Navigation, ShoppingBag } from "lucide-react";
+import {
+  CONTENT_DEFAULTS,
+  type HoursContent,
+  type StoreInfoContent,
+} from "@/lib/content";
 
 function getTodayIndex(): number {
   const d = new Date().getDay();
@@ -12,7 +16,18 @@ function getTodayIndex(): number {
 const MAP_SRC =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2952.360337545654!2d-71.81030538793966!3d42.27083087108138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e38d405c98edaf%3A0x532fad0eab9785f1!2sJerry's%20Warehouse!5e0!3m2!1sen!2sus!4v1780863371163!5m2!1sen!2sus";
 
-export default function HoursLocation() {
+export default function HoursLocation({
+  hours,
+  storeInfo,
+}: {
+  hours?: HoursContent;
+  storeInfo?: StoreInfoContent;
+}) {
+  const days = (hours ?? CONTENT_DEFAULTS.hours).days;
+  const info = storeInfo ?? CONTENT_DEFAULTS.store_info;
+  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+    `${info.street}, ${info.city}, ${info.state} ${info.zip}`
+  )}`;
   const sectionRef = useRef<HTMLElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
   const [showMap, setShowMap] = useState(false);
@@ -90,14 +105,14 @@ export default function HoursLocation() {
               <address className="not-italic">
                 <div className="flex items-center gap-2 mb-1">
                   <MapPin size={16} className="text-[#c49335] flex-shrink-0" strokeWidth={1.5} />
-                  <p className="font-semibold text-[#4a2c0a] text-base">{STORE_INFO.address.street}</p>
+                  <p className="font-semibold text-[#4a2c0a] text-base">{info.street}</p>
                 </div>
                 <p className="text-[#6e4218] text-base pl-6">
-                  {STORE_INFO.address.city}, {STORE_INFO.address.state} {STORE_INFO.address.zip}
+                  {info.city}, {info.state} {info.zip}
                 </p>
               </address>
               <a
-                href={STORE_INFO.directionsUrl}
+                href={directionsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 shrink-0 py-2.5 px-5 bg-[#c49335] hover:bg-[#d4a853] text-white font-semibold text-sm rounded transition-colors duration-200"
@@ -123,7 +138,7 @@ export default function HoursLocation() {
                 </tr>
               </thead>
               <tbody>
-                {STORE_HOURS.map((row, i) => {
+                {days.map((row, i) => {
                   const isToday = i === todayIndex;
                   return (
                     <tr
@@ -156,15 +171,15 @@ export default function HoursLocation() {
             {/* Contact */}
             <div className="mt-8 pt-8 border-t border-[#e8d8c0] space-y-4">
               <a
-                href={`tel:${STORE_INFO.phone.replace(/\D/g, "")}`}
+                href={`tel:${info.phone.replace(/\D/g, "")}`}
                 className="flex items-center gap-3 text-[#6e4218] hover:text-[#c49335] transition-colors duration-200 group"
-                aria-label={`Call us at ${STORE_INFO.phone}`}
+                aria-label={`Call us at ${info.phone}`}
               >
                 <Phone size={17} className="text-[#c49335]/60 group-hover:text-[#c49335] transition-colors flex-shrink-0" strokeWidth={1.5} />
-                <span className="text-base">{STORE_INFO.phone}</span>
+                <span className="text-base">{info.phone}</span>
               </a>
               <a
-                href="https://www.ebay.com/usr/miso_242497?mkcid=16&mkevt=1&mkrid=711-127632-2357-0&ssspo=vrnrm_g4r4u&sssrc=4623447&ssuid=vrnrm_g4r4u&stype=1&widget_ver=artemis&media=COPY"
+                href={info.ebayUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 text-[#6e4218] hover:text-[#c49335] transition-colors duration-200 group"

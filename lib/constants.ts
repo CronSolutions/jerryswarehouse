@@ -185,3 +185,31 @@ export const FOOTER = {
   copyright: `© ${new Date().getFullYear()} Jerry's Warehouse. All rights reserved.`,
   hoursSummary: "Tue–Sat: 12–7 PM  ·  Sun: 12–5 PM  ·  Mon: Closed",
 };
+
+// ─── Shared defaults (used as fallback when Supabase content is absent) ────────
+
+export const EBAY_URL =
+  "https://www.ebay.com/usr/miso_242497?mkcid=16&mkevt=1&mkrid=711-127632-2357-0&ssspo=vrnrm_g4r4u&sssrc=4623447&ssuid=vrnrm_g4r4u&stype=1&widget_ver=artemis&media=COPY";
+
+export const MARQUEE_ITEMS = [
+  "Clothes & Apparel",
+  "Collectibles & Vintage",
+  "Shoes & Accessories",
+];
+
+export const REVIEWS = [
+  { name: "Aurora Faria", rating: 5, text: "Adored your Hudson location! So excited to visit in your new spot in Worcester. The selection, curation, and passion was all there — and the person who helped me was so enthusiastic and positive, it was honestly refreshing.", timeAgo: "1 year ago" },
+  { name: "Peter S", rating: 5, text: "Been going to Jerry's Warehouse since they first opened, and it's always great! The owners are incredibly friendly, and it's refreshing to find a place where you can haggle for a good deal, which is pretty rare these days.", timeAgo: "1 year ago" },
+  { name: "Sam Hogan", rating: 5, text: "We love Jerry's! Whoever works Sundays is lovely — and so helpful. Great selection of mostly 90s attire. We've found gems each time we've gone. Very fairly priced, and always good jams to boot.", timeAgo: "1 year ago" },
+  { name: "Nick", rating: 5, text: "Without a doubt the greatest shopping experience I've ever had in my life. Incredible selection, great vibes, some of the best people I've met in my life. Would recommend going out of your way to stop by.", timeAgo: "1 year ago" },
+  { name: "Kyelele", rating: 5, text: "Amazing selection and prices. There is always new stuff. Can't get vintage cheaper anywhere else — cheaper than Savers. Owner is extremely nice and welcoming. Couldn't recommend this place enough.", timeAgo: "2 months ago" },
+  { name: "Nick Gandza", rating: 5, text: "Awesome vintage store with lots of great 90s and older pieces. The owner is super friendly and informative.", timeAgo: "8 months ago" },
+  { name: "Owen McNally", rating: 5, text: "Very cool shop, owner is extremely nice. Great vintage pieces for very fair prices.", timeAgo: "9 months ago" },
+  { name: "Robbie Lynch", rating: 5, text: "Great place with fair pricing — definitely a great place to check out.", timeAgo: "3 months ago" },
+  { name: "Robbie Caggiula", rating: 5, text: "Awesome shop, owners are very friendly and helpful. Highly recommend stopping by if you get the chance — no other shop like it around here and great prices on great clothing.", timeAgo: "1 year ago" },
+  { name: "Scott Thomas", rating: 5, text: "Great spot, great vibes, great people. Highly recommend!", timeAgo: "2 years ago" },
+  { name: "Zachary Mitrakas", rating: 5, text: "Awesome spot — the staff is super friendly, and the setup is great. One of a kind store. Highly recommend to anyone in the area.", timeAgo: "2 years ago" },
+  { name: "Lidia Kontchaeva", rating: 5, text: "Really great spot and the owner is awesome.", timeAgo: "1 year ago" },
+  { name: "Matthew Donovan", rating: 5, text: "Cool spot tucked away downtown. Nice collection, good prices.", timeAgo: "2 years ago" },
+  { name: "Mitchy B", rating: 5, text: "The best there is in vintage!", timeAgo: "1 year ago" },
+];

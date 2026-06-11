@@ -1,6 +1,16 @@
 import { unstable_cache } from "next/cache";
 import { supabasePublic } from "@/lib/supabase/public";
-import { HERO } from "@/lib/constants";
+import {
+  HERO,
+  VALUE_PROPS,
+  STORE_INFO,
+  STORE_HOURS,
+  SOCIAL_LINKS,
+  FOOTER,
+  EBAY_URL,
+  MARQUEE_ITEMS,
+  REVIEWS,
+} from "@/lib/constants";
 
 // Tag used to invalidate all cached content when the admin saves.
 export const CONTENT_TAG = "site-content";
@@ -12,9 +22,49 @@ export type AboutContent = {
   paragraph2: string;
   paragraph3: string;
 };
+export type StoreInfoContent = {
+  phone: string;
+  email: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  ebayUrl: string;
+};
+export type HoursDay = {
+  day: string;
+  open: string;
+  close: string;
+  closed: boolean;
+};
+export type HoursContent = { days: HoursDay[] };
+export type ValuePropItem = { title: string; description: string };
+export type ValuePropsContent = {
+  headingLead: string;
+  headingAccent: string;
+  items: ValuePropItem[];
+};
+export type ReviewItem = {
+  name: string;
+  rating: number;
+  text: string;
+  timeAgo: string;
+};
+export type ReviewsContent = {
+  headingLead: string;
+  headingAccent: string;
+  items: ReviewItem[];
+};
+export type CategoriesContent = { items: string[] };
+export type FooterContent = {
+  tagline: string;
+  instagramHandle: string;
+  instagramUrl: string;
+  ebayUrl: string;
+};
 
-// Defaults used when a row is missing or Supabase is unreachable.
-const DEFAULTS = {
+// ─── Defaults (used when a row is missing or Supabase is unreachable) ─────────
+export const CONTENT_DEFAULTS = {
   hero: { headline: HERO.headline, tagline: HERO.tagline } as HeroContent,
   about: {
     paragraph1:
@@ -24,9 +74,46 @@ const DEFAULTS = {
     paragraph3:
       "More than a store, it's a community — a place to dig, to discover, and to leave with something that feels like it was waiting just for you.",
   } as AboutContent,
+  store_info: {
+    phone: STORE_INFO.phone,
+    email: STORE_INFO.email,
+    street: STORE_INFO.address.street,
+    city: STORE_INFO.address.city,
+    state: STORE_INFO.address.state,
+    zip: STORE_INFO.address.zip,
+    ebayUrl: EBAY_URL,
+  } as StoreInfoContent,
+  hours: {
+    days: STORE_HOURS.map((h) => ({
+      day: h.day,
+      open: h.open ?? "",
+      close: h.close ?? "",
+      closed: h.closed,
+    })),
+  } as HoursContent,
+  value_props: {
+    headingLead: "The Jerry's",
+    headingAccent: "Difference",
+    items: VALUE_PROPS.map((v) => ({
+      title: v.title,
+      description: v.description,
+    })),
+  } as ValuePropsContent,
+  reviews: {
+    headingLead: "Loved by",
+    headingAccent: "Worcester",
+    items: REVIEWS,
+  } as ReviewsContent,
+  categories: { items: MARQUEE_ITEMS } as CategoriesContent,
+  footer: {
+    tagline: FOOTER.tagline,
+    instagramHandle: SOCIAL_LINKS[0].handle,
+    instagramUrl: SOCIAL_LINKS[0].url,
+    ebayUrl: EBAY_URL,
+  } as FooterContent,
 };
 
-/** Low-level cached fetch of one section's JSON. */
+// ─── Cached low-level fetch ──────────────────────────────────────────────────
 const getSection = unstable_cache(
   async (section: string) => {
     const client = supabasePublic;
@@ -43,14 +130,17 @@ const getSection = unstable_cache(
   { tags: [CONTENT_TAG], revalidate: 3600 }
 );
 
-export async function getHero(): Promise<HeroContent> {
-  const data = await getSection("hero");
-  return { ...DEFAULTS.hero, ...(data as Partial<HeroContent> | null) };
+async function read<T>(section: string, fallback: T): Promise<T> {
+  const data = await getSection(section);
+  return { ...fallback, ...(data as Partial<T> | null) };
 }
 
-export async function getAbout(): Promise<AboutContent> {
-  const data = await getSection("about");
-  return { ...DEFAULTS.about, ...(data as Partial<AboutContent> | null) };
-}
-
-export const CONTENT_DEFAULTS = DEFAULTS;
+// ─── Public getters ──────────────────────────────────────────────────────────
+export const getHero = () => read("hero", CONTENT_DEFAULTS.hero);
+export const getAbout = () => read("about", CONTENT_DEFAULTS.about);
+export const getStoreInfo = () => read("store_info", CONTENT_DEFAULTS.store_info);
+export const getHours = () => read("hours", CONTENT_DEFAULTS.hours);
+export const getValueProps = () => read("value_props", CONTENT_DEFAULTS.value_props);
+export const getReviews = () => read("reviews", CONTENT_DEFAULTS.reviews);
+export const getCategories = () => read("categories", CONTENT_DEFAULTS.categories);
+export const getFooter = () => read("footer", CONTENT_DEFAULTS.footer);
