@@ -1,17 +1,28 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { STORE_INFO, NAV_LINKS } from "@/lib/constants";
 import { CONTENT_DEFAULTS, type StoreInfoContent } from "@/lib/content";
 
-export default function Navbar({ storeInfo }: { storeInfo?: StoreInfoContent }) {
+export default function Navbar({
+  storeInfo,
+  solid = false,
+}: {
+  storeInfo?: StoreInfoContent;
+  solid?: boolean;
+}) {
+  const router = useRouter();
   const phone = (storeInfo ?? CONTENT_DEFAULTS.store_info).phone;
   const telHref = `tel:${phone.replace(/\D/g, "")}`;
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const lastY = useRef(0);
+
+  // Force the opaque/dark-text style on pages without a hero behind the bar.
+  const solidBar = solid || scrolled || isOpen;
 
   useEffect(() => {
     const handler = () => {
@@ -31,9 +42,19 @@ export default function Navbar({ storeInfo }: { storeInfo?: StoreInfoContent }) 
 
   const handleNav = (href: string) => {
     setIsOpen(false);
-    if (!href) { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+    if (!href) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    // Route links (e.g. /shop) navigate; hash links scroll, or jump home if the
+    // target section isn't on the current page.
+    if (href.startsWith("/")) {
+      router.push(href);
+      return;
+    }
     const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+    else router.push(`/${href}`);
   };
 
   return (
@@ -42,7 +63,7 @@ export default function Navbar({ storeInfo }: { storeInfo?: StoreInfoContent }) 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         hidden ? "-translate-y-full" : "translate-y-0"
       } ${
-        scrolled || isOpen
+        solidBar
           ? "bg-[#f5ede0] backdrop-blur-md border-b border-[#e8d8c0] py-3"
           : "bg-transparent py-3"
       }`}
@@ -61,7 +82,7 @@ export default function Navbar({ storeInfo }: { storeInfo?: StoreInfoContent }) 
             <span className="font-serif text-3xl font-bold text-[#d4a853] group-hover:text-[#e8c278] transition-colors duration-300">
               Jerry&apos;s
             </span>
-            <span className={`font-serif text-sm tracking-[0.25em] uppercase transition-colors duration-300 ${scrolled || isOpen ? "text-[#6e4218] group-hover:text-[#4a2c0a]" : "text-[#c8a07a] group-hover:text-[#f5eed8]"}`}>
+            <span className={`font-serif text-sm tracking-[0.25em] uppercase transition-colors duration-300 ${solidBar ? "text-[#6e4218] group-hover:text-[#4a2c0a]" : "text-[#c8a07a] group-hover:text-[#f5eed8]"}`}>
               Warehouse
             </span>
           </a>
@@ -73,7 +94,7 @@ export default function Navbar({ storeInfo }: { storeInfo?: StoreInfoContent }) 
                 <li key={link.href}>
                   <button
                     onClick={() => handleNav(link.href)}
-                    className={`text-base lg:text-xl font-semibold transition-colors duration-200 tracking-wide hover:text-[#d4a853] ${scrolled || isOpen ? "text-[#4a2c0a]" : "text-[#ffffff]"}`}
+                    className={`text-base lg:text-xl font-semibold transition-colors duration-200 tracking-wide hover:text-[#d4a853] ${solidBar ? "text-[#4a2c0a]" : "text-[#ffffff]"}`}
                   >
                     {link.label}
                   </button>
@@ -96,7 +117,7 @@ export default function Navbar({ storeInfo }: { storeInfo?: StoreInfoContent }) 
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
             onClick={() => setIsOpen(!isOpen)}
-            className={`md:hidden p-2 transition-colors ${scrolled || isOpen ? "text-[#4a2c0a] hover:text-[#c49335]" : "text-[#c8a07a] hover:text-[#d4a853]"}`}
+            className={`md:hidden p-2 transition-colors ${solidBar ? "text-[#4a2c0a] hover:text-[#c49335]" : "text-[#c8a07a] hover:text-[#d4a853]"}`}
           >
             {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>

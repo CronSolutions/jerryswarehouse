@@ -172,6 +172,7 @@ export const META: MetaInfo = {
 
 export const NAV_LINKS = [
   { label: "HOME", href: "#hero" },
+  { label: "SHOP", href: "/shop" },
   { label: "ABOUT", href: "#about" },
   { label: "WHY US", href: "#why-us" },
   { label: "LOCATE", href: "#location" },

@@ -88,6 +88,12 @@ export default function AdminDashboard({
           <div className="flex items-center gap-4">
             <span className="hidden sm:inline text-xs text-[#9a6840]">{email}</span>
             <a
+              href="/admin/products"
+              className="text-sm font-medium text-[#6e4218] hover:text-[#c49335] transition-colors"
+            >
+              Shop
+            </a>
+            <a
               href="/"
               target="_blank"
               className="text-sm text-[#6e4218] hover:text-[#c49335] transition-colors"
