@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { HERO as HERO_DEFAULTS, STORE_HOURS } from "@/lib/constants";
-import { asset } from "@/lib/asset";
 import type { HeroContent } from "@/lib/content";
 
 function getTodayStatus(): string {
@@ -13,7 +12,13 @@ function getTodayStatus(): string {
   return `Open today · ${hours.open} – ${hours.close}`;
 }
 
-export default function Hero({ content }: { content?: HeroContent }) {
+export default function Hero({
+  content,
+  imageSrc = "/images/hero-bg.webp",
+}: {
+  content?: HeroContent;
+  imageSrc?: string;
+}) {
   // Editable text comes from Supabase via props; CTA buttons stay in constants.
   const HERO = { ...HERO_DEFAULTS, ...content };
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -60,7 +65,7 @@ export default function Hero({ content }: { content?: HeroContent }) {
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src={asset("/images/hero-bg.webp")}
+          src={imageSrc}
           alt="Thrift store interior with vintage items"
           fill
           priority

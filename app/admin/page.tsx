@@ -9,6 +9,7 @@ import {
   getReviews,
   getCategories,
   getFooter,
+  getMedia,
 } from "@/lib/content";
 import AdminDashboard from "./AdminDashboard";
 
@@ -23,7 +24,7 @@ export default async function AdminPage() {
   const user = await getAdminUser();
   if (!user) redirect("/admin/login?error=not-allowed");
 
-  const [hero, about, storeInfo, hours, valueProps, reviews, categories, footer] =
+  const [hero, about, storeInfo, hours, valueProps, reviews, categories, footer, media] =
     await Promise.all([
       getHero(),
       getAbout(),
@@ -33,6 +34,7 @@ export default async function AdminPage() {
       getReviews(),
       getCategories(),
       getFooter(),
+      getMedia(),
     ]);
 
   return (
@@ -47,6 +49,7 @@ export default async function AdminPage() {
         reviews,
         categories,
         footer,
+        media,
       }}
     />
   );

@@ -38,6 +38,12 @@ export default function AnalyticsDashboard({
     sales: c.cents / 100,
     units: c.count,
   }));
+  const monthSeries = data.revenueByMonth.map((m) => ({
+    month: new Date(`${m.month}-01T00:00:00`).toLocaleString("en-US", {
+      month: "short",
+    }),
+    revenue: m.cents / 100,
+  }));
   const hasSales = data.totalOrders > 0;
 
   return (
@@ -71,11 +77,16 @@ export default function AnalyticsDashboard({
         <h1 className="font-serif text-3xl font-bold">Analytics</h1>
 
         {/* Stat cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
           <Stat label="Total revenue" value={formatPrice(data.totalRevenueCents)} />
           <Stat label="Orders" value={String(data.totalOrders)} />
+          <Stat label="Avg order value" value={formatPrice(data.averageOrderCents)} />
           <Stat label="Items sold" value={String(data.totalItemsSold)} />
           <Stat label="Items listed" value={String(data.availableCount)} />
+          <Stat
+            label="Avg days to sell"
+            value={data.avgDaysToSell == null ? "—" : `${data.avgDaysToSell} days`}
+          />
         </div>
 
         {/* Revenue over time */}
@@ -102,6 +113,44 @@ export default function AnalyticsDashboard({
         </Panel>
 
         <div className="grid lg:grid-cols-2 gap-8">
+          {/* Revenue by month */}
+          <Panel title="Revenue by month (last 6)">
+            {hasSales ? (
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={monthSeries} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e8d8c0" />
+                  <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#9a6840" }} />
+                  <YAxis tick={{ fontSize: 11, fill: "#9a6840" }} tickFormatter={(v) => `$${v}`} />
+                  <Tooltip formatter={(v: any) => [`$${Number(v).toFixed(2)}`, "Revenue"]} />
+                  <Bar dataKey="revenue" fill={AMBER} radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <Empty>No sales yet.</Empty>
+            )}
+          </Panel>
+
+          {/* Top sellers */}
+          <Panel title="Top sellers">
+            {data.topProducts.length ? (
+              <ul className="divide-y divide-[#f0e7d8]">
+                {data.topProducts.map((p, i) => (
+                  <li key={i} className="flex items-center justify-between py-2.5 text-sm">
+                    <span className="text-[#4a2c0a] truncate pr-3">
+                      <span className="text-[#9a6840] mr-2">{i + 1}.</span>
+                      {p.name}
+                    </span>
+                    <span className="text-[#6e4218] whitespace-nowrap">
+                      {p.units} sold · {formatPrice(p.revenueCents)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Empty>No sales yet.</Empty>
+            )}
+          </Panel>
+
           {/* Sales by category */}
           <Panel title="Sales by category ($)">
             {categorySales.length ? (

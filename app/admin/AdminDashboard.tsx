@@ -1,16 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { saveSection, signOut } from "./actions";
-import type {
-  HeroContent,
-  AboutContent,
-  StoreInfoContent,
-  HoursContent,
-  ValuePropsContent,
-  ReviewsContent,
-  CategoriesContent,
-  FooterContent,
+import { uploadProductImage } from "@/lib/imageUpload";
+import {
+  DEFAULT_MEDIA,
+  mediaSrc,
+  type HeroContent,
+  type AboutContent,
+  type StoreInfoContent,
+  type HoursContent,
+  type ValuePropsContent,
+  type ReviewsContent,
+  type CategoriesContent,
+  type FooterContent,
+  type MediaContent,
 } from "@/lib/content";
 
 type ContentBundle = {
@@ -22,6 +27,7 @@ type ContentBundle = {
   reviews: ReviewsContent;
   categories: CategoriesContent;
   footer: FooterContent;
+  media: MediaContent;
 };
 
 type SectionId = keyof ContentBundle;
@@ -29,6 +35,7 @@ type SectionId = keyof ContentBundle;
 const SECTIONS: { id: SectionId; label: string; desc: string }[] = [
   { id: "hero", label: "Hero", desc: "Headline & tagline" },
   { id: "about", label: "About", desc: "Our Story paragraphs" },
+  { id: "media", label: "Homepage Images", desc: "Hero, About, Why Us photos" },
   { id: "store_info", label: "Store Info", desc: "Address, phone, links" },
   { id: "hours", label: "Hours", desc: "Opening times" },
   { id: "value_props", label: "Why Us", desc: "The Jerry's Difference" },
@@ -425,6 +432,30 @@ export default function AdminDashboard({
             </Panel>
           )}
 
+          {tab === "media" && (
+            <Panel title="Homepage Images">
+              <p className="text-sm text-[#6e4218] -mt-2">
+                Replace the photos shown on the homepage. New images are
+                auto-compressed before upload.
+              </p>
+              {(
+                [
+                  ["hero", "Hero background"],
+                  ["about", "About — Our Story photo"],
+                  ["whyUs", "Why Us photo"],
+                ] as const
+              ).map(([key, label]) => (
+                <MediaField
+                  key={key}
+                  label={label}
+                  path={forms.media[key]}
+                  fallback={DEFAULT_MEDIA[key]}
+                  onChange={(p) => update("media", { ...forms.media, [key]: p })}
+                />
+              ))}
+            </Panel>
+          )}
+
           <div className="flex items-center gap-4 pt-6 mt-6 border-t border-[#e8d8c0]">
             <button
               onClick={() => save(tab)}
@@ -453,6 +484,68 @@ function formatPhone(input: string): string {
   if (d.length < 4) return d;
   if (d.length < 7) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
   return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
+}
+
+function MediaField({
+  label,
+  path,
+  fallback,
+  onChange,
+}: {
+  label: string;
+  path: string;
+  fallback: string;
+  onChange: (path: string) => void;
+}) {
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const src = mediaSrc(path, fallback);
+
+  async function onFile(file: File | undefined) {
+    if (!file) return;
+    setUploading(true);
+    setErr(null);
+    try {
+      const p = await uploadProductImage(file);
+      onChange(p);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Upload failed.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div>
+      <label className={labelCls}>{label}</label>
+      <div className="flex items-center gap-4">
+        <div className="relative w-40 h-28 rounded-lg overflow-hidden bg-[#f5ede0] border border-[#e8d8c0] flex-shrink-0">
+          <Image src={src} alt="" fill className="object-cover" sizes="160px" />
+        </div>
+        <div className="space-y-2">
+          <label className="inline-block bg-[#c49335] hover:bg-[#d4a853] text-white font-semibold text-sm rounded-lg px-4 py-2 cursor-pointer transition-colors">
+            {uploading ? "Uploading…" : "Upload new"}
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => onFile(e.target.files?.[0])}
+            />
+          </label>
+          {path && (
+            <button
+              type="button"
+              onClick={() => onChange("")}
+              className="block text-xs text-[#6e4218] hover:text-[#c49335]"
+            >
+              Reset to original
+            </button>
+          )}
+          {err && <p className="text-xs text-red-600">{err}</p>}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {

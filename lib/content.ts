@@ -56,6 +56,14 @@ export type ReviewsContent = {
   items: ReviewItem[];
 };
 export type CategoriesContent = { items: string[] };
+export type MediaContent = { hero: string; about: string; whyUs: string };
+
+/** Bundled fallback image paths (used until the admin uploads a replacement). */
+export const DEFAULT_MEDIA = {
+  hero: "/images/hero-bg.webp",
+  about: "/images/about.webp",
+  whyUs: "/images/why-us.webp",
+};
 export type FooterContent = {
   tagline: string;
   instagramHandle: string;
@@ -105,6 +113,8 @@ export const CONTENT_DEFAULTS = {
     items: REVIEWS,
   } as ReviewsContent,
   categories: { items: MARQUEE_ITEMS } as CategoriesContent,
+  // Empty string = use the bundled default image.
+  media: { hero: "", about: "", whyUs: "" } as MediaContent,
   footer: {
     tagline: FOOTER.tagline,
     instagramHandle: SOCIAL_LINKS[0].handle,
@@ -144,3 +154,12 @@ export const getValueProps = () => read("value_props", CONTENT_DEFAULTS.value_pr
 export const getReviews = () => read("reviews", CONTENT_DEFAULTS.reviews);
 export const getCategories = () => read("categories", CONTENT_DEFAULTS.categories);
 export const getFooter = () => read("footer", CONTENT_DEFAULTS.footer);
+export const getMedia = () => read("media", CONTENT_DEFAULTS.media);
+
+/** Resolve a stored media path (in the product-images bucket) or fall back. */
+export function mediaSrc(path: string, fallback: string): string {
+  if (!path) return fallback;
+  if (path.startsWith("http") || path.startsWith("/")) return path;
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  return `${base}/storage/v1/object/public/product-images/${path}`;
+}

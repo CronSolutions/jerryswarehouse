@@ -15,6 +15,7 @@ const ALLOWED_SECTIONS = new Set([
   "reviews",
   "categories",
   "footer",
+  "media",
 ]);
 
 /** Upsert one content section, then refresh the cached public site. */

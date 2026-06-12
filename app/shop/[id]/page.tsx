@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { getStoreInfo, getFooter } from "@/lib/content";
-import { getProduct, formatPrice } from "@/lib/shop";
+import { getProduct, productImageUrl, formatPrice } from "@/lib/shop";
 import AddToCartButton from "@/components/shop/AddToCartButton";
 import ProductGallery from "@/components/shop/ProductGallery";
 
@@ -25,8 +25,31 @@ export default async function ProductPage({ params }: { params: { id: string } }
   if (!product) notFound();
   const sold = product.status === "sold";
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description || undefined,
+    image: product.images.map((p) => productImageUrl(p)),
+    category: product.category || undefined,
+    sku: product.id,
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "USD",
+      price: (product.price_cents / 100).toFixed(2),
+      availability: sold
+        ? "https://schema.org/SoldOut"
+        : "https://schema.org/InStock",
+      itemCondition: "https://schema.org/UsedCondition",
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar storeInfo={storeInfo} solid />
       <main className="min-h-screen bg-white pt-32 pb-24 px-6 sm:px-8 lg:px-[150px]">
         <Link

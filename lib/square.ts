@@ -51,6 +51,13 @@ export async function createPaymentLink(opts: {
 
   const json = await res.json();
   if (!res.ok) {
+    console.error(
+      "[square] payment-link error:",
+      res.status,
+      "env:",
+      process.env.SQUARE_ENVIRONMENT ?? "(unset→sandbox)",
+      JSON.stringify(json?.errors)
+    );
     const msg = json?.errors?.[0]?.detail ?? "Square checkout failed.";
     throw new Error(msg);
   }

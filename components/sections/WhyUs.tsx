@@ -2,10 +2,15 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { asset } from "@/lib/asset";
 import { CONTENT_DEFAULTS, type ValuePropsContent } from "@/lib/content";
 
-export default function WhyUs({ content }: { content?: ValuePropsContent }) {
+export default function WhyUs({
+  content,
+  imageSrc = "/images/why-us.webp",
+}: {
+  content?: ValuePropsContent;
+  imageSrc?: string;
+}) {
   const data = content ?? CONTENT_DEFAULTS.value_props;
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -46,7 +51,7 @@ export default function WhyUs({ content }: { content?: ValuePropsContent }) {
           <div className="animate-on-scroll order-2 lg:order-1">
             <div className="relative aspect-[5/4] w-full overflow-hidden">
               <Image
-                src={asset("/images/why-us.webp")}
+                src={imageSrc}
                 alt="Beautifully finished interior featuring our flooring"
                 fill
                 className="object-cover"

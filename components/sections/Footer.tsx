@@ -136,6 +136,29 @@ export default function Footer({
             <ContactForm />
           </div>
         </div>
+
+        {/* Bottom bar: policies + copyright */}
+        <div className="mt-12 pt-6 border-t border-[#e8d8c0] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <nav aria-label="Legal" className="flex flex-wrap gap-x-5 gap-y-2">
+            {[
+              { href: "/shipping", label: "Shipping" },
+              { href: "/returns", label: "Returns" },
+              { href: "/terms", label: "Terms" },
+              { href: "/privacy", label: "Privacy" },
+            ].map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="text-xs text-[#9a6840] hover:text-[#c49335] transition-colors duration-200"
+              >
+                {l.label}
+              </a>
+            ))}
+          </nav>
+          <p className="text-xs text-[#9a6840]">
+            © {new Date().getFullYear()} Jerry&apos;s Warehouse. All rights reserved.
+          </p>
+        </div>
       </div>
     </footer>
   );

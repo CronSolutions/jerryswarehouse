@@ -15,10 +15,13 @@ import {
   getReviews,
   getCategories,
   getFooter,
+  getMedia,
+  mediaSrc,
+  DEFAULT_MEDIA,
 } from "@/lib/content";
 
 export default async function HomePage() {
-  const [hero, about, storeInfo, hours, valueProps, reviews, categories, footer] =
+  const [hero, about, storeInfo, hours, valueProps, reviews, categories, footer, media] =
     await Promise.all([
       getHero(),
       getAbout(),
@@ -28,16 +31,17 @@ export default async function HomePage() {
       getReviews(),
       getCategories(),
       getFooter(),
+      getMedia(),
     ]);
 
   return (
     <>
       <Navbar storeInfo={storeInfo} />
       <main id="main-content">
-        <Hero content={hero} />
+        <Hero content={hero} imageSrc={mediaSrc(media.hero, DEFAULT_MEDIA.hero)} />
         <Categories content={categories} />
-        <About content={about} />
-        <WhyUs content={valueProps} />
+        <About content={about} imageSrc={mediaSrc(media.about, DEFAULT_MEDIA.about)} />
+        <WhyUs content={valueProps} imageSrc={mediaSrc(media.whyUs, DEFAULT_MEDIA.whyUs)} />
         <Reviews content={reviews} />
         <HoursLocation hours={hours} storeInfo={storeInfo} />
       </main>
