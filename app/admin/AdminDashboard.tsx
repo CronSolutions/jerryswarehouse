@@ -94,6 +94,12 @@ export default function AdminDashboard({
               Shop
             </a>
             <a
+              href="/admin/analytics"
+              className="text-sm font-medium text-[#6e4218] hover:text-[#c49335] transition-colors"
+            >
+              Analytics
+            </a>
+            <a
               href="/"
               target="_blank"
               className="text-sm text-[#6e4218] hover:text-[#c49335] transition-colors"
