@@ -498,11 +498,12 @@ function MediaField({
   onChange: (path: string) => void;
 }) {
   const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const src = mediaSrc(path, fallback);
 
   async function onFile(file: File | undefined) {
-    if (!file) return;
+    if (!file || !file.type.startsWith("image/")) return;
     setUploading(true);
     setErr(null);
     try {
@@ -519,9 +520,36 @@ function MediaField({
     <div>
       <label className={labelCls}>{label}</label>
       <div className="flex items-center gap-4">
-        <div className="relative w-40 h-28 rounded-lg overflow-hidden bg-[#f5ede0] border border-[#e8d8c0] flex-shrink-0">
+        <label
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragOver(true);
+          }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragOver(false);
+            onFile(e.dataTransfer.files?.[0]);
+          }}
+          className={`relative w-40 h-28 rounded-lg overflow-hidden bg-[#f5ede0] border-2 flex-shrink-0 cursor-pointer transition-colors ${
+            dragOver ? "border-[#c49335]" : "border-[#e8d8c0] border-solid"
+          }`}
+        >
           <Image src={src} alt="" fill className="object-cover" sizes="160px" />
-        </div>
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => onFile(e.target.files?.[0])}
+          />
+          <span
+            className={`absolute inset-0 flex items-center justify-center bg-black/40 text-white text-xs font-medium transition-opacity ${
+              dragOver ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            Drop to upload
+          </span>
+        </label>
         <div className="space-y-2">
           <label className="inline-block bg-[#c49335] hover:bg-[#d4a853] text-white font-semibold text-sm rounded-lg px-4 py-2 cursor-pointer transition-colors">
             {uploading ? "Uploading…" : "Upload new"}
