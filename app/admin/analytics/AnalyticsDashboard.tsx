@@ -64,6 +64,9 @@ export default function AnalyticsDashboard({
             <a href="/admin/products" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
               Shop
             </a>
+            <a href="/admin/messages" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
+              Messages
+            </a>
             <form action={signOut}>
               <button className="font-medium text-[#6e4218] hover:text-[#c49335] transition-colors">
                 Sign out

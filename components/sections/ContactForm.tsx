@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { submitMessage } from "@/app/contact/actions";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -9,14 +10,21 @@ export default function ContactForm() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const isValid =
     name.trim() !== "" && EMAIL_RE.test(email.trim()) && message.trim() !== "";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isValid) return;
-    setSubmitted(true);
+    setSending(true);
+    setError(null);
+    const res = await submitMessage({ name, email, message });
+    setSending(false);
+    if (res.ok) setSubmitted(true);
+    else setError(res.error);
   };
 
   const inputClass =
@@ -109,12 +117,14 @@ export default function ContactForm() {
         />
       </div>
 
+      {error && <p className="text-sm text-red-600">{error}</p>}
+
       <button
         type="submit"
-        disabled={!isValid}
+        disabled={!isValid || sending}
         className="w-full bg-transparent border border-[#c49335] rounded-lg px-6 py-3 text-sm font-semibold text-[#c49335] transition-all duration-200 hover:bg-[#c49335] hover:text-white disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#c49335]"
       >
-        Send Message
+        {sending ? "Sending…" : "Send Message"}
       </button>
     </form>
   );

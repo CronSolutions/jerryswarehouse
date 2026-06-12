@@ -107,6 +107,12 @@ export default function AdminDashboard({
               Analytics
             </a>
             <a
+              href="/admin/messages"
+              className="text-sm font-medium text-[#6e4218] hover:text-[#c49335] transition-colors"
+            >
+              Messages
+            </a>
+            <a
               href="/"
               target="_blank"
               className="text-sm text-[#6e4218] hover:text-[#c49335] transition-colors"

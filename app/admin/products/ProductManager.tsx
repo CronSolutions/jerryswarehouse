@@ -233,6 +233,9 @@ export default function ProductManager({
             <a href="/admin/analytics" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
               Analytics
             </a>
+            <a href="/admin/messages" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
+              Messages
+            </a>
             <a href="/shop" target="_blank" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
               View shop ↗
             </a>
