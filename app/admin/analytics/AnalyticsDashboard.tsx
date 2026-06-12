@@ -50,7 +50,7 @@ export default function AnalyticsDashboard({
     <div className="min-h-screen bg-[#faf6ed] text-[#4a2c0a]">
       <AdminNav email={email} subtitle="Analytics" />
 
-      <div className="max-w-6xl mx-auto px-6 py-10 space-y-8">
+      <div className="max-w-6xl mx-auto px-6 py-10 space-y-8 overflow-x-hidden">
         <h1 className="font-serif text-3xl font-bold">Analytics</h1>
 
         {/* Stat cards */}
@@ -89,7 +89,7 @@ export default function AnalyticsDashboard({
           )}
         </Panel>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-8 min-w-0">
           {/* Revenue by month */}
           <Panel title="Revenue by month (last 6)">
             {hasSales ? (
@@ -215,16 +215,16 @@ export default function AnalyticsDashboard({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-white border border-[#e8d8c0] rounded-xl p-5">
-      <p className="text-xs uppercase tracking-wide text-[#9a6840] mb-1">{label}</p>
-      <p className="font-serif text-2xl font-bold text-[#4a2c0a]">{value}</p>
+    <div className="bg-white border border-[#e8d8c0] rounded-xl p-5 min-w-0">
+      <p className="text-xs uppercase tracking-wide text-[#9a6840] mb-1 truncate">{label}</p>
+      <p className="font-serif text-2xl font-bold text-[#4a2c0a] truncate">{value}</p>
     </div>
   );
 }
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white border border-[#e8d8c0] rounded-xl p-5">
+    <div className="bg-white border border-[#e8d8c0] rounded-xl p-5 min-w-0 overflow-hidden">
       <h2 className="text-sm font-semibold text-[#4a2c0a] mb-4">{title}</h2>
       {children}
     </div>
