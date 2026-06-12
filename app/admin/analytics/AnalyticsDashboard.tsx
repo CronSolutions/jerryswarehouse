@@ -15,7 +15,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { signOut } from "../actions";
+import AdminNav from "../AdminNav";
 import { formatPrice } from "@/lib/shop";
 import type { Analytics } from "@/lib/analytics";
 
@@ -48,33 +48,7 @@ export default function AnalyticsDashboard({
 
   return (
     <div className="min-h-screen bg-[#faf6ed] text-[#4a2c0a]">
-      <header className="border-b border-[#e8d8c0] bg-white sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="leading-none">
-            <span className="font-serif text-2xl font-bold text-[#c49335]">Jerry&apos;s</span>
-            <span className="font-serif text-xs tracking-[0.3em] uppercase text-[#9a6840] ml-2">
-              Analytics
-            </span>
-          </div>
-          <div className="flex items-center gap-4 text-sm">
-            <span className="hidden sm:inline text-xs text-[#9a6840]">{email}</span>
-            <a href="/admin" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
-              Site text
-            </a>
-            <a href="/admin/products" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
-              Shop
-            </a>
-            <a href="/admin/messages" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
-              Messages
-            </a>
-            <form action={signOut}>
-              <button className="font-medium text-[#6e4218] hover:text-[#c49335] transition-colors">
-                Sign out
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
+      <AdminNav email={email} subtitle="Analytics" />
 
       <div className="max-w-6xl mx-auto px-6 py-10 space-y-8">
         <h1 className="font-serif text-3xl font-bold">Analytics</h1>

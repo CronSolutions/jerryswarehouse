@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { signOut } from "../actions";
+import AdminNav from "../AdminNav";
 import {
   createProduct,
   updateProduct,
@@ -214,39 +214,7 @@ export default function ProductManager({
 
   return (
     <div className="min-h-screen bg-[#faf6ed] text-[#4a2c0a]">
-      {/* Top bar */}
-      <header className="border-b border-[#e8d8c0] bg-white sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="leading-none">
-            <span className="font-serif text-2xl font-bold text-[#c49335]">
-              Jerry&apos;s
-            </span>
-            <span className="font-serif text-xs tracking-[0.3em] uppercase text-[#9a6840] ml-2">
-              Shop Admin
-            </span>
-          </div>
-          <div className="flex items-center gap-4 text-sm">
-            <span className="hidden sm:inline text-xs text-[#9a6840]">{email}</span>
-            <a href="/admin" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
-              Site text
-            </a>
-            <a href="/admin/analytics" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
-              Analytics
-            </a>
-            <a href="/admin/messages" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
-              Messages
-            </a>
-            <a href="/shop" target="_blank" className="text-[#6e4218] hover:text-[#c49335] transition-colors">
-              View shop ↗
-            </a>
-            <form action={signOut}>
-              <button className="font-medium text-[#6e4218] hover:text-[#c49335] transition-colors">
-                Sign out
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
+      <AdminNav email={email} subtitle="Shop" />
 
       <div className="max-w-5xl mx-auto px-6 py-10">
         <div className="flex items-center justify-between mb-6">

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { saveSection, signOut } from "./actions";
+import { saveSection } from "./actions";
+import AdminNav from "./AdminNav";
 import { uploadProductImage } from "@/lib/imageUpload";
 import {
   DEFAULT_MEDIA,
@@ -81,52 +82,7 @@ export default function AdminDashboard({
 
   return (
     <div className="min-h-screen bg-[#faf6ed] text-[#4a2c0a]">
-      {/* Top bar */}
-      <header className="border-b border-[#e8d8c0] bg-white sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="leading-none">
-            <span className="font-serif text-2xl font-bold text-[#c49335]">
-              Jerry&apos;s
-            </span>
-            <span className="font-serif text-xs tracking-[0.3em] uppercase text-[#9a6840] ml-2">
-              Admin
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="hidden sm:inline text-xs text-[#9a6840]">{email}</span>
-            <a
-              href="/admin/products"
-              className="text-sm font-medium text-[#6e4218] hover:text-[#c49335] transition-colors"
-            >
-              Shop
-            </a>
-            <a
-              href="/admin/analytics"
-              className="text-sm font-medium text-[#6e4218] hover:text-[#c49335] transition-colors"
-            >
-              Analytics
-            </a>
-            <a
-              href="/admin/messages"
-              className="text-sm font-medium text-[#6e4218] hover:text-[#c49335] transition-colors"
-            >
-              Messages
-            </a>
-            <a
-              href="/"
-              target="_blank"
-              className="text-sm text-[#6e4218] hover:text-[#c49335] transition-colors"
-            >
-              View site ↗
-            </a>
-            <form action={signOut}>
-              <button className="text-sm font-medium text-[#6e4218] hover:text-[#c49335] transition-colors">
-                Sign out
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
+      <AdminNav email={email} subtitle="Admin" />
 
       <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-[210px_1fr] gap-8">
         {/* Section nav */}
