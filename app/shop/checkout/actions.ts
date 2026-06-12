@@ -3,9 +3,12 @@
 import { headers } from "next/headers";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createPaymentLink, type SquareLineItem } from "@/lib/square";
-import { SHIPPING_CENTS, type Product } from "@/lib/shop";
+import { SHIPPING_CENTS, calcTaxCents, type Product } from "@/lib/shop";
 
 type Result = { ok: true; url: string } | { ok: false; error: string };
+
+// How long a checkout holds a reservation before it's considered abandoned.
+const RESERVATION_MINUTES = 15;
 
 export async function createCheckout(
   itemIds: string[],
@@ -27,12 +30,17 @@ export async function createCheckout(
     };
   }
 
-  // Re-fetch from the DB so prices/availability come from the server, not the client.
+  const cutoff = new Date(
+    Date.now() - RESERVATION_MINUTES * 60 * 1000
+  ).toISOString();
+
+  // Re-fetch from the DB: available AND not currently reserved by someone else.
   const { data, error: productErr } = await supabase
     .from("products")
     .select("*")
     .in("id", itemIds)
-    .eq("status", "available");
+    .eq("status", "available")
+    .or(`reserved_at.is.null,reserved_at.lt.${cutoff}`);
 
   if (productErr) {
     console.error("[checkout] product fetch:", productErr);
@@ -40,25 +48,27 @@ export async function createCheckout(
   }
 
   const products = (data as Product[]) ?? [];
-
   if (products.length !== itemIds.length) {
     return {
       ok: false,
-      error: "One or more items just sold or are no longer available. Please review your cart.",
+      error:
+        "One or more items just sold or are in someone else's checkout. Please review your cart.",
     };
   }
 
   const subtotal = products.reduce((sum, p) => sum + p.price_cents, 0);
   const shipping = fulfillment === "shipping" ? SHIPPING_CENTS : 0;
-  const total = subtotal + shipping;
+  const tax = calcTaxCents(products.map((p) => p.price_cents));
+  const total = subtotal + shipping + tax;
 
-  // Create the local order first
+  // Create the local order
   const { data: order, error: orderErr } = await supabase
     .from("orders")
     .insert({
       fulfillment,
       subtotal_cents: subtotal,
       shipping_cents: shipping,
+      tax_cents: tax,
       total_cents: total,
       status: "pending",
     })
@@ -73,6 +83,31 @@ export async function createCheckout(
     };
   }
 
+  const releaseAndCancel = async () => {
+    await supabase
+      .from("products")
+      .update({ reserved_order_id: null, reserved_at: null })
+      .eq("reserved_order_id", order.id);
+    await supabase.from("orders").update({ status: "canceled" }).eq("id", order.id);
+  };
+
+  // Atomically reserve the items — only rows still available & unreserved win.
+  const { data: reserved } = await supabase
+    .from("products")
+    .update({ reserved_order_id: order.id, reserved_at: new Date().toISOString() })
+    .in("id", itemIds)
+    .eq("status", "available")
+    .or(`reserved_at.is.null,reserved_at.lt.${cutoff}`)
+    .select("id");
+
+  if (!reserved || reserved.length !== itemIds.length) {
+    await releaseAndCancel();
+    return {
+      ok: false,
+      error: "Sorry — one of those items was just reserved by another shopper.",
+    };
+  }
+
   const { error: itemsErr } = await supabase.from("order_items").insert(
     products.map((p) => ({
       order_id: order.id,
@@ -83,6 +118,7 @@ export async function createCheckout(
   );
   if (itemsErr) {
     console.error("[checkout] order_items insert:", itemsErr);
+    await releaseAndCancel();
     return { ok: false, error: `Could not save order items: ${itemsErr.message}` };
   }
 
@@ -92,6 +128,7 @@ export async function createCheckout(
     amountCents: p.price_cents,
   }));
   if (shipping > 0) lineItems.push({ name: "Shipping", amountCents: shipping });
+  if (tax > 0) lineItems.push({ name: "Sales tax (MA)", amountCents: tax });
 
   const h = headers();
   const origin =
@@ -113,7 +150,7 @@ export async function createCheckout(
       .eq("id", order.id);
     return { ok: true, url: link.url };
   } catch (e) {
-    await supabase.from("orders").update({ status: "canceled" }).eq("id", order.id);
+    await releaseAndCancel();
     return {
       ok: false,
       error: e instanceof Error ? e.message : "Checkout failed. Please try again.",

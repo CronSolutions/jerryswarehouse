@@ -6,6 +6,26 @@ export const PRODUCTS_TAG = "products";
 /** Flat shipping fee in cents, applied when the buyer chooses shipping. */
 export const SHIPPING_CENTS = 800;
 
+// ─── Massachusetts sales tax ─────────────────────────────────────────────────
+// MA: 6.25%. Clothing is exempt up to $175 per item; only the amount ABOVE
+// $175 on a single item is taxable. Shipping (separately stated) is not taxed.
+export const MA_TAX_RATE = 0.0625;
+export const CLOTHING_EXEMPTION_CENTS = 17500;
+
+/** Taxable portion of a single clothing item (amount above $175). */
+export function taxablePortionCents(priceCents: number): number {
+  return Math.max(0, priceCents - CLOTHING_EXEMPTION_CENTS);
+}
+
+/** MA sales tax (cents) for a set of item prices. */
+export function calcTaxCents(itemPricesCents: number[]): number {
+  const taxable = itemPricesCents.reduce(
+    (sum, p) => sum + taxablePortionCents(p),
+    0
+  );
+  return Math.round(taxable * MA_TAX_RATE);
+}
+
 export type ProductStatus = "available" | "sold" | "hidden";
 
 export type Product = {

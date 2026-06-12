@@ -1,11 +1,11 @@
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { getStoreInfo, getFooter } from "@/lib/content";
-import { getProduct, productImageUrl, formatPrice } from "@/lib/shop";
+import { getProduct, formatPrice } from "@/lib/shop";
 import AddToCartButton from "@/components/shop/AddToCartButton";
+import ProductGallery from "@/components/shop/ProductGallery";
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const product = await getProduct(params.id);
@@ -38,35 +38,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           {/* Images */}
-          <div className="space-y-3">
-            <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#f5ede0]">
-              {product.images[0] && (
-                <Image
-                  src={productImageUrl(product.images[0])}
-                  alt={product.name}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover"
-                />
-              )}
-            </div>
-            {product.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-3">
-                {product.images.slice(1).map((path) => (
-                  <div key={path} className="relative aspect-square overflow-hidden bg-[#f5ede0]">
-                    <Image
-                      src={productImageUrl(path)}
-                      alt={product.name}
-                      fill
-                      sizes="20vw"
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <ProductGallery images={product.images} name={product.name} />
 
           {/* Info */}
           <div className="lg:pt-2">

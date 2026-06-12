@@ -41,9 +41,54 @@ const BLANK: FormState = {
   status: "available",
 };
 
+const SIZE_OPTIONS = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL", "One Size"];
+
+const CATEGORY_OPTIONS = [
+  "Jackets & Outerwear",
+  "Tops",
+  "T-Shirts",
+  "Sweaters & Hoodies",
+  "Bottoms",
+  "Jeans",
+  "Dresses",
+  "Shoes",
+  "Accessories",
+  "Bags",
+  "Hats",
+  "Other",
+];
+
+const CONDITION_OPTIONS = [
+  "New with tags",
+  "Like new",
+  "Excellent",
+  "Very good",
+  "Good",
+  "Fair",
+];
+
 const labelCls = "block text-sm font-medium text-[#4a2c0a] mb-2";
 const inputCls =
   "w-full bg-transparent border border-[#e8d8c0] rounded-lg px-4 py-2.5 text-sm text-[#4a2c0a] placeholder-[#9a6840]/70 focus:border-[#c49335] focus:outline-none transition-colors";
+
+/** Allow only digits + a single decimal point, max 2 decimals (while typing). */
+function sanitizePrice(v: string): string {
+  let s = v.replace(/[^\d.]/g, "");
+  const dot = s.indexOf(".");
+  if (dot !== -1) {
+    const intPart = s.slice(0, dot);
+    const decPart = s.slice(dot + 1).replace(/\./g, "").slice(0, 2);
+    s = `${intPart}.${decPart}`;
+  }
+  return s;
+}
+
+/** Normalize to 2 decimals on blur, e.g. "10" → "10.00", "10.5" → "10.50". */
+function formatPriceInput(v: string): string {
+  if (v.trim() === "") return "";
+  const n = parseFloat(v);
+  return isNaN(n) ? "" : n.toFixed(2);
+}
 
 export default function ProductManager({
   email,
@@ -57,6 +102,7 @@ export default function ProductManager({
   const [form, setForm] = useState<FormState>(BLANK);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   function startNew() {
@@ -80,13 +126,14 @@ export default function ProductManager({
     setError(null);
   }
 
-  async function handleFiles(files: FileList | null) {
-    if (!files || files.length === 0) return;
+  async function handleFiles(files: FileList | File[] | null) {
+    const list = files ? Array.from(files).filter((f) => f.type.startsWith("image/")) : [];
+    if (list.length === 0) return;
     setUploading(true);
     setError(null);
     try {
       const paths: string[] = [];
-      for (const file of Array.from(files)) {
+      for (const file of list) {
         paths.push(await uploadProductImage(file));
       }
       setForm((f) => ({ ...f, images: [...f.images, ...paths] }));
@@ -100,6 +147,32 @@ export default function ProductManager({
   async function removeImage(path: string) {
     setForm((f) => ({ ...f, images: f.images.filter((p) => p !== path) }));
     deleteProductImages([path]).catch(() => {});
+  }
+
+  function moveImage(index: number, dir: -1 | 1) {
+    setForm((f) => {
+      const imgs = [...f.images];
+      const j = index + dir;
+      if (j < 0 || j >= imgs.length) return f;
+      [imgs[index], imgs[j]] = [imgs[j], imgs[index]];
+      return { ...f, images: imgs };
+    });
+  }
+
+  function setCover(index: number) {
+    setForm((f) => {
+      if (index === 0) return f;
+      const imgs = [...f.images];
+      const [img] = imgs.splice(index, 1);
+      imgs.unshift(img);
+      return { ...f, images: imgs };
+    });
+  }
+
+  function onDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setDragOver(false);
+    handleFiles(e.dataTransfer.files);
   }
 
   async function save() {
@@ -194,31 +267,84 @@ export default function ProductManager({
             {/* Images */}
             <div>
               <label className={labelCls}>Photos</label>
-              <div className="flex flex-wrap gap-3 mb-3">
-                {form.images.map((path) => (
-                  <div key={path} className="relative w-24 h-24 rounded-lg overflow-hidden border border-[#e8d8c0]">
-                    <Image src={productImageUrl(path)} alt="" fill className="object-cover" sizes="96px" />
-                    <button
-                      onClick={() => removeImage(path)}
-                      className="absolute top-1 right-1 bg-black/60 text-white text-xs rounded px-1.5 leading-5"
-                      aria-label="Remove image"
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setDragOver(true);
+                }}
+                onDragLeave={() => setDragOver(false)}
+                onDrop={onDrop}
+                className={`rounded-xl border-2 border-dashed p-4 transition-colors ${
+                  dragOver
+                    ? "border-[#c49335] bg-[#c49335]/5"
+                    : "border-[#e8d8c0] bg-[#faf6ed]/50"
+                }`}
+              >
+                <div className="flex flex-wrap gap-3">
+                  {form.images.map((path, i) => (
+                    <div
+                      key={path}
+                      className="group relative w-24 h-24 rounded-lg overflow-hidden border border-[#e8d8c0]"
                     >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-                <label className="w-24 h-24 rounded-lg border border-dashed border-[#d9cdb8] flex items-center justify-center text-center text-xs text-[#9a6840] cursor-pointer hover:border-[#c49335] hover:text-[#c49335] transition-colors">
-                  {uploading ? "Uploading…" : "+ Add photo"}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    onChange={(e) => handleFiles(e.target.files)}
-                  />
-                </label>
+                      <Image src={productImageUrl(path)} alt="" fill className="object-cover" sizes="96px" />
+                      {i === 0 && (
+                        <span className="absolute top-1 left-1 bg-[#c49335] text-white text-[10px] px-1 rounded leading-4">
+                          Cover
+                        </span>
+                      )}
+                      <button
+                        onClick={() => removeImage(path)}
+                        className="absolute top-1 right-1 bg-black/60 text-white text-xs rounded px-1.5 leading-5"
+                        aria-label="Remove image"
+                      >
+                        ✕
+                      </button>
+                      <div className="absolute bottom-0 inset-x-0 flex items-center justify-between bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => moveImage(i, -1)}
+                          disabled={i === 0}
+                          className="text-white text-xs px-1.5 py-0.5 disabled:opacity-30"
+                          aria-label="Move left"
+                        >
+                          ◀
+                        </button>
+                        {i !== 0 && (
+                          <button
+                            onClick={() => setCover(i)}
+                            className="text-white text-[10px] px-1"
+                          >
+                            Cover
+                          </button>
+                        )}
+                        <button
+                          onClick={() => moveImage(i, 1)}
+                          disabled={i === form.images.length - 1}
+                          className="text-white text-xs px-1.5 py-0.5 disabled:opacity-30"
+                          aria-label="Move right"
+                        >
+                          ▶
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <label className="w-24 h-24 rounded-lg border border-dashed border-[#d9cdb8] flex items-center justify-center text-center text-xs text-[#9a6840] cursor-pointer hover:border-[#c49335] hover:text-[#c49335] transition-colors">
+                    {uploading ? "Uploading…" : "+ Add photo"}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      onChange={(e) => handleFiles(e.target.files)}
+                    />
+                  </label>
+                </div>
+                <p className="text-xs text-[#9a6840] mt-3 text-center">
+                  {dragOver
+                    ? "Drop to upload"
+                    : "Drag & drop photos here, or click + Add photo"}
+                </p>
               </div>
-              <p className="text-xs text-[#9a6840]">
+              <p className="text-xs text-[#9a6840] mt-2">
                 Photos are auto-resized &amp; compressed to WebP before upload.
               </p>
             </div>
@@ -238,7 +364,12 @@ export default function ProductManager({
                 <label className={labelCls}>Price ($)</label>
                 <input
                   value={form.price}
-                  onChange={(e) => setForm({ ...form, price: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, price: sanitizePrice(e.target.value) })
+                  }
+                  onBlur={() =>
+                    setForm((f) => ({ ...f, price: formatPriceInput(f.price) }))
+                  }
                   inputMode="decimal"
                   className={inputCls}
                   placeholder="24.00"
@@ -246,30 +377,57 @@ export default function ProductManager({
               </div>
               <div>
                 <label className={labelCls}>Size</label>
-                <input
+                <select
                   value={form.size}
                   onChange={(e) => setForm({ ...form, size: e.target.value })}
                   className={inputCls}
-                  placeholder="M"
-                />
+                >
+                  <option value="">— None —</option>
+                  {form.size && !SIZE_OPTIONS.includes(form.size) && (
+                    <option value={form.size}>{form.size} (current)</option>
+                  )}
+                  {SIZE_OPTIONS.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className={labelCls}>Category</label>
-                <input
+                <select
                   value={form.category}
                   onChange={(e) => setForm({ ...form, category: e.target.value })}
                   className={inputCls}
-                  placeholder="Jacket"
-                />
+                >
+                  <option value="">— None —</option>
+                  {form.category && !CATEGORY_OPTIONS.includes(form.category) && (
+                    <option value={form.category}>{form.category} (current)</option>
+                  )}
+                  {CATEGORY_OPTIONS.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className={labelCls}>Condition</label>
-                <input
+                <select
                   value={form.condition}
                   onChange={(e) => setForm({ ...form, condition: e.target.value })}
                   className={inputCls}
-                  placeholder="Excellent"
-                />
+                >
+                  <option value="">— None —</option>
+                  {form.condition && !CONDITION_OPTIONS.includes(form.condition) && (
+                    <option value={form.condition}>{form.condition} (current)</option>
+                  )}
+                  {CONDITION_OPTIONS.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 

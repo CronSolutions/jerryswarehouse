@@ -184,7 +184,12 @@ export default function AdminDashboard({
                 <Field
                   label="Phone"
                   value={forms.store_info.phone}
-                  onChange={(v) => update("store_info", { ...forms.store_info, phone: v })}
+                  onChange={(v) =>
+                    update("store_info", {
+                      ...forms.store_info,
+                      phone: formatPhone(v),
+                    })
+                  }
                 />
                 <Field
                   label="Email"
@@ -441,6 +446,14 @@ export default function AdminDashboard({
 }
 
 // ─── Reusable pieces ─────────────────────────────────────────────────────────
+
+/** Strip non-digits and format as (XXX) XXX-XXXX as the user types. */
+function formatPhone(input: string): string {
+  const d = input.replace(/\D/g, "").slice(0, 10);
+  if (d.length < 4) return d;
+  if (d.length < 7) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
+  return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
+}
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (

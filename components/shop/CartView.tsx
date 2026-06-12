@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/lib/cart";
-import { productImageUrl, formatPrice, SHIPPING_CENTS } from "@/lib/shop";
+import { productImageUrl, formatPrice, SHIPPING_CENTS, calcTaxCents } from "@/lib/shop";
 import { createCheckout } from "@/app/shop/checkout/actions";
 
 export default function CartView() {
@@ -14,7 +14,8 @@ export default function CartView() {
   const [error, setError] = useState<string | null>(null);
 
   const shipping = fulfillment === "shipping" ? SHIPPING_CENTS : 0;
-  const total = subtotalCents + shipping;
+  const tax = calcTaxCents(items.map((i) => i.price_cents));
+  const total = subtotalCents + shipping + tax;
 
   async function checkout() {
     setSubmitting(true);
@@ -132,6 +133,10 @@ export default function CartView() {
             <span className="text-[#4a2c0a]">
               {shipping === 0 ? "Free" : formatPrice(shipping)}
             </span>
+          </div>
+          <div className={rowCls}>
+            <span className="text-[#6e4218]">Sales tax</span>
+            <span className="text-[#4a2c0a]">{formatPrice(tax)}</span>
           </div>
           <div className="flex justify-between font-semibold text-[#4a2c0a] pt-2">
             <span>Total</span>
